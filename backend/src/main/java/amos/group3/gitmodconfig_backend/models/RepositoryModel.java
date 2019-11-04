@@ -8,11 +8,13 @@ public class RepositoryModel {
 
     private int id;
 
-    private String name;
+    private String repo;
 
     private String type;
 
     private String url;
+
+    private String owner;
 
     private int[] submodules;
 }
