@@ -1,0 +1,16 @@
+[
+  {
+    "id" : 1,
+    "name": "HMI-Output",
+    "type" : "content",
+    "url" : "https://github.com/stubb/AMOS_HMI-Output",
+    "submodules" : []
+  },
+  {
+    "id" : 2,
+    "name": "InputConsole",
+    "type" : "content",
+    "url" : "https://github.com/stubb/AMOS_InputConsole",
+    "submodules" : []
+  }
+]
