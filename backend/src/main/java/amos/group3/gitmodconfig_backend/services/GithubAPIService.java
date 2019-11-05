@@ -1,5 +1,6 @@
 package amos.group3.gitmodconfig_backend.services;
 
+import amos.group3.gitmodconfig_backend.models.BranchModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +38,10 @@ public class GithubAPIService {
 
     }
 
-    public void getBranchesOfRepository(int id){
+    public BranchModel[] getBranchesOfRepository(int id){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(id);
-       // return restTemplate.getForObject(baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + se)
+        final String branchesOfRepositoryURL = baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + selectedRepository.getRepo() + "/branches";
+        return restTemplate.getForObject(branchesOfRepositoryURL, BranchModel[].class);
     }
 
 }

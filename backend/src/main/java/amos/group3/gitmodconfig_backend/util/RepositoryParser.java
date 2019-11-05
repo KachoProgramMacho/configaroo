@@ -7,12 +7,17 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.logging.Logger;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Component
 public class RepositoryParser {
@@ -39,7 +44,9 @@ public class RepositoryParser {
     }
 
     public RepositoryModel getRepositoryById(int id){
-        return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst().get();
+            return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst()
+                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+
     }
 
     public ArrayList<RepositoryModel> getRepositories(){
