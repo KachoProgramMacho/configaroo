@@ -1,0 +1,5 @@
+<select (change)="changeValue($event)">
+  <option *ngFor="let repo of repositories" value="kurvi">
+    {{ repo.owner }}
+  </option>
+</select>
