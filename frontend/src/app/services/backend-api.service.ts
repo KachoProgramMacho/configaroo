@@ -12,6 +12,6 @@ export class BackendAPIService {
   constructor(private http: HttpClient) {}
 
   getRepositories(): Observable<Repository[]> {
-    return this.http.get<Repository[]>(this.backendUrl + "/repositories");
+    return this.http.get<Repository[]>(this.backendUrl + "/repository");
   }
 }

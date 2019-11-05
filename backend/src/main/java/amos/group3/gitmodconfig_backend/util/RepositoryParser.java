@@ -38,6 +38,10 @@ public class RepositoryParser {
         return repositories.toString();
     }
 
+    public RepositoryModel getRepositoryById(int id){
+        return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst().get();
+    }
+
     public ArrayList<RepositoryModel> getRepositories(){
         return this.repositories;
     }

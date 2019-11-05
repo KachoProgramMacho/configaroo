@@ -38,7 +38,8 @@ public class GithubAPIService {
     }
 
     public void getBranchesOfRepository(int id){
-
+        RepositoryModel selectedRepository = repositoryParser.getRepositoryById(id);
+       // return restTemplate.getForObject(baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + se)
     }
 
 }

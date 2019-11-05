@@ -17,12 +17,12 @@ public class GithubAPIController {
     @Autowired
     private RepositoryParser repositoryParser;
 
-    @GetMapping("/repository")
+    @GetMapping("/api/repository")
     public ArrayList<RepositoryModel> getRepositories(){
         return repositoryParser.getRepositories();
     }
 
-    @GetMapping("/repository/{id}/branch")
+    @GetMapping("/api/repository/{id}/branch")
     public ArrayList<RepositoryModel> getBranchesOfRepository(@PathVariable int id){
 
 
