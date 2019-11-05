@@ -18,6 +18,7 @@ import java.util.Arrays;
 public class RepositoryParser {
 
     ArrayList<RepositoryModel> repositories;
+
     @Autowired
     ResourceLoader resourceLoader;
 

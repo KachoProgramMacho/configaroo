@@ -37,4 +37,8 @@ public class GithubAPIService {
 
     }
 
+    public void getBranchesOfRepository(int id){
+
+    }
+
 }
