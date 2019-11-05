@@ -1,5 +1,11 @@
-<select (change)="changeValue($event)">
-  <option *ngFor="let repo of repositories" value="kurvi">
-    {{ repo.owner }}
+<select (change)="onSelectRepo($event)">
+  <option *ngFor="let repo of repositories" value="{{ repo.id }}">
+    {{ repo.repo }}
+  </option>
+</select>
+
+<select>
+  <option *ngFor="let branch of branches" value="{{ repo.name }}">
+    {{ branch.name }}
   </option>
 </select>
