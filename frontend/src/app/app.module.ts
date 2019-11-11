@@ -7,13 +7,15 @@ import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { MainComponent } from "./components/main/main.component";
 import { ConfigFormComponent } from "./components/config-form/config-form.component";
+import { RowComponent } from './components/row/row.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     MainComponent,
-    ConfigFormComponent
+    ConfigFormComponent,
+    RowComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],

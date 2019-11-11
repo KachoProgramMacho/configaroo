@@ -1,11 +1,6 @@
-<select (change)="onSelectRepo($event)">
-  <option *ngFor="let repo of repositories" value="{{ repo.id }}">
-    {{ repo.repo }}
-  </option>
-</select>
+<div *ngFor="let row of rows">
+  <app-row></app-row>
+</div>
 
-<select>
-  <option *ngFor="let branch of branches" value="{{ branch.name }}">
-    {{ branch.name }}
-  </option>
-</select>
+<button (click)="onAddRow($event)">Add+</button>
+<button (click)="onRemoveRow($event)">Remove-</button>
