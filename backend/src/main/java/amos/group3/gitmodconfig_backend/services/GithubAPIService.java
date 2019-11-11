@@ -66,12 +66,12 @@ public class GithubAPIService {
     }
 
     public String createRepository(){
-        final String createRepositoryURL = "https://api.github.com/amosDummy/repos";
+        final String createRepositoryURL = "https://api.github.com/user/repos";
         CreateRepositoryModel createRepositoryModel = CreateRepositoryModel.builder().name("RandomRepository"+ new Random().nextInt(999)).build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
+        headers.set(AUTHORIZATION,"token "+GITHUB_PERSONAL_TOKEN);
 
         HttpEntity<CreateRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(createRepositoryModel, headers);
 
