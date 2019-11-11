@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Repository } from "../models/Repository";
 import { Branch } from "../models/Branch";
+import { Commit } from "../models/Commit";
 
 @Injectable({
   providedIn: "root"
@@ -19,6 +20,12 @@ export class BackendAPIService {
   getBranchesOfRepo(repoId): Observable<Branch[]> {
     return this.http.get<Branch[]>(
       `${this.backendUrl}/repository/${repoId}/branches`
+    );
+  }
+
+  getCommitsOfRepo(repoId, branchName): Observable<Commit[]> {
+    return this.http.get<Commit[]>(
+      `${this.backendUrl}/repository/${repoId}/branches/${branchName}/commits`
     );
   }
 }

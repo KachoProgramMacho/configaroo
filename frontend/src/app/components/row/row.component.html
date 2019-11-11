@@ -7,11 +7,25 @@
   </option>
 </select>
 
-<select>
+<select
+  (change)="onSelectBranch($event)"
+  [disabled]="selectedRepoId.length == 0"
+>
   <option value="">
     Select branch...
   </option>
   <option *ngFor="let branch of branches" value="{{ branch.name }}">
     {{ branch.name }}
+  </option>
+</select>
+
+<select
+  [disabled]="selectedRepoId.length == 0 || selectedBranchName.length == 0"
+>
+  <option value="">
+    Select commit...
+  </option>
+  <option *ngFor="let commit of commits" value="{{ commit.sha }}">
+    {{ commit.sha }}
   </option>
 </select>
