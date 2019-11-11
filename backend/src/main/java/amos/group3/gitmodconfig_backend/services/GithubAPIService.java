@@ -71,7 +71,7 @@ public class GithubAPIService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(AUTHORIZATION,"token "+GITHUB_PERSONAL_TOKEN);
+        headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
 
         HttpEntity<CreateRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(createRepositoryModel, headers);
 
