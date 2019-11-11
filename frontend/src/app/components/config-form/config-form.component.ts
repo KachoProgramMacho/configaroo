@@ -24,8 +24,10 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onRemoveRow(e) {
-    this.numberOfRows -= 1;
-    this.updateRows;
+    if(this.numberOfRows > 0) {
+      this.numberOfRows -= 1;
+      this.updateRows();
+    }
   }
 
   updateRows() {

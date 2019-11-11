@@ -2,6 +2,7 @@ package amos.group3.gitmodconfig_backend.controllers;
 
 
 import amos.group3.gitmodconfig_backend.models.BranchModel;
+import amos.group3.gitmodconfig_backend.models.CommitModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.services.GithubAPIService;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
@@ -31,8 +32,15 @@ public class GithubAPIController {
         return repositoryParser.getRepositories();
     }
 
-    @GetMapping("/api/repository/{id}/branches")
-    public BranchModel[] getBranchesOfRepository(@PathVariable int id){
-            return githubAPIService.getBranchesOfRepository(id);
+        @GetMapping("/api/repository/{repositoryId}/branches")
+    public BranchModel[] getBranchesOfRepository(@PathVariable int repositoryId){
+            return githubAPIService.getBranchesOfRepository(repositoryId);
     }
+
+    @GetMapping("/api/repository/{repositoryId}/branches/{branchName}/commits")
+    public CommitModel[] getBranchesOfRepository(@PathVariable int repositoryId, @PathVariable String branchName){
+        return githubAPIService.getCommitsOfBranchOfRepository(repositoryId,branchName);
+    }
+
+
 }
