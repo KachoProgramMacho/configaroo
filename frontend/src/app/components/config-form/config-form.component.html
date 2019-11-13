@@ -12,6 +12,6 @@
 <button (click)="onRemoveRow($event)">Remove-</button>
 
 <div>
-  <input type="text" [(ngModel)]="repoName" />
+  <input type="text" (change)="onRepoNameChange($event)" />
   <button (click)="onCreateConfig($event)">Create Configuration</button>
 </div>
