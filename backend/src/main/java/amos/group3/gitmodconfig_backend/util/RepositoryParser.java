@@ -1,8 +1,11 @@
 package amos.group3.gitmodconfig_backend.util;
 
+import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
+import amos.group3.gitmodconfig_backend.models.SubmoduleModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -14,24 +17,33 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.logging.Logger;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Component
 public class RepositoryParser {
 
-    ArrayList<RepositoryModel> repositories;
-
     @Autowired
-    ResourceLoader resourceLoader;
+    private ResourceLoader resourceLoader;
 
+    @Value("${GITHUB_ACCOUNT_OWNER}")
+    private String GITHUB_ACCOUNT_OWNER;
+
+    private final String GITHUB_URL_PREFIX = "https://github.com/";
+
+    private ArrayList<RepositoryModel> repositories;
+
+    private Resource resource;
     @PostConstruct
     public void readJSONRepositoryFile(){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            Resource resource=resourceLoader.getResource("classpath:repositories.json");
+            resource=resourceLoader.getResource("classpath:repositories.json");
             repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(resource.getFile(), RepositoryModel[].class)));
 
         } catch (IOException e) {
@@ -39,14 +51,46 @@ public class RepositoryParser {
         }
     }
 
-    public String printRepositories(){
-        return repositories.toString();
+    public RepositoryModel getRepositoryById(int id){
+        return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst()
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+
     }
 
-    public RepositoryModel getRepositoryById(int id){
-            return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst()
-                    .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+    public RepositoryModel saveNewConfiguration(ConfigurationRepositoryModel configurationRepositoryModel){
 
+        int[] submodules = Arrays.asList(configurationRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
+                .mapToInt(i->i).toArray();
+        RepositoryModel newRepo = RepositoryModel.builder()
+                .repo(configurationRepositoryModel.getName())
+                .owner(GITHUB_ACCOUNT_OWNER)
+                .id(generateId())
+                .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+configurationRepositoryModel.getName())
+                .type("configuration")
+                .submodules(submodules).build();
+        repositories.add(newRepo);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File("src\\main\\resources\\repositories.json"), repositories);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getIdByRepositoryName(String name){
+        return repositories.stream().filter(repositoryModel -> repositoryModel.getRepo().equals(name))
+                .findFirst().get().getId();
+    }
+
+    //return max id value +1
+    public int generateId(){
+        return repositories.stream().map(RepositoryModel::getId)
+                .max(Comparator.comparing(i -> i)).get()+1;
+    }
+
+    public String printRepositories(){
+        return repositories.toString();
     }
 
     public ArrayList<RepositoryModel> getRepositories(){

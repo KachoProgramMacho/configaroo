@@ -3,14 +3,13 @@ package amos.group3.gitmodconfig_backend.controllers;
 
 import amos.group3.gitmodconfig_backend.models.BranchModel;
 import amos.group3.gitmodconfig_backend.models.CommitModel;
+import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.services.GithubAPIService;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class GithubAPIController {
         return repositoryParser.getRepositories();
     }
 
-        @GetMapping("/api/repository/{repositoryId}/branches")
+    @GetMapping("/api/repository/{repositoryId}/branches")
     public BranchModel[] getBranchesOfRepository(@PathVariable int repositoryId){
             return githubAPIService.getBranchesOfRepository(repositoryId);
     }
@@ -42,5 +41,12 @@ public class GithubAPIController {
         return githubAPIService.getCommitsOfBranchOfRepository(repositoryId,branchName);
     }
 
+    @PostMapping("/api/repository")
+    public ConfigurationRepositoryModel createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
+
+        githubAPIService.createRepository(configurationRepositoryModel);
+        repositoryParser.saveNewConfiguration(configurationRepositoryModel);
+        return configurationRepositoryModel;
+    }
 
 }

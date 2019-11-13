@@ -1,18 +1,29 @@
 [
   {
-    "id" : 1,
+    "id": 1,
     "repo": "AMOS_HMI-Output",
-    "type" : "content",
-    "url" : "https://github.com/stubb/AMOS_HMI-Output",
+    "type": "content",
+    "url": "https://github.com/stubb/AMOS_HMI-Output",
     "owner": "stubb",
-    "submodules" : []
+    "submodules": []
   },
   {
-    "id" : 2,
+    "id": 2,
     "repo": "AMOS_InputConsole",
-    "type" : "content",
-    "url" : "https://github.com/stubb/AMOS_InputConsole",
+    "type": "content",
+    "url": "https://github.com/stubb/AMOS_InputConsole",
     "owner": "stubb",
-    "submodules" : []
+    "submodules": []
+  },
+  {
+    "id": 3,
+    "repo": "vlizameVGIthub",
+    "type": "configuration",
+    "url": "https://github.com/amosDummy/vlizameVGIthub",
+    "owner": "amosDummy",
+    "submodules": [
+      1,
+      2
+    ]
   }
 ]

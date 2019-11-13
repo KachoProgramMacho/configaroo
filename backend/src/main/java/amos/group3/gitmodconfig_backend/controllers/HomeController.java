@@ -25,8 +25,8 @@ public class HomeController {
         return result;
     }
 
-    @GetMapping("/createRepo")
+/*    @GetMapping("/createRepo")
     public String createRepo(){
         return githubAPIService.createRepository();
-    }
+    }*/
 }

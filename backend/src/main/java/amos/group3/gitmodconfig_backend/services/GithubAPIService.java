@@ -2,25 +2,21 @@ package amos.group3.gitmodconfig_backend.services;
 
 import amos.group3.gitmodconfig_backend.models.BranchModel;
 import amos.group3.gitmodconfig_backend.models.CommitModel;
-import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
+import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @Service
 public class GithubAPIService {
@@ -32,6 +28,7 @@ public class GithubAPIService {
     private String GITHUB_PERSONAL_TOKEN;
 
     private final String baseURL_Github = "https://api.github.com";
+    private final String createRepositoryURL = "https://api.github.com/user/repos";
 
     private RestTemplate restTemplate;
 
@@ -65,15 +62,15 @@ public class GithubAPIService {
         return this.restTemplate.getForObject(commitsOfSelectedBranchURL,CommitModel[].class);
     }
 
-    public String createRepository(){
-        final String createRepositoryURL = "https://api.github.com/user/repos";
-        CreateRepositoryModel createRepositoryModel = CreateRepositoryModel.builder().name("RandomRepository"+ new Random().nextInt(999)).build();
+    public String createRepository(ConfigurationRepositoryModel configurationRepositoryModel){
+
+        configurationRepositoryModel.setAuto_init(true);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
 
-        HttpEntity<CreateRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(createRepositoryModel, headers);
+        HttpEntity<ConfigurationRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(configurationRepositoryModel, headers);
 
         return restTemplate.postForObject(createRepositoryURL,createNewRepositoryPostRequest,String.class);
     }
