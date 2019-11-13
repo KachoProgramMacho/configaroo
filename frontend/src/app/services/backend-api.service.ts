@@ -19,6 +19,8 @@ export class BackendAPIService {
   }
 
   getBranchesOfRepo(repoId): Observable<Branch[]> {
+    console.log("WTF", repoId);
+
     return this.http.get<Branch[]>(
       `${this.backendUrl}/repository/${repoId}/branches`
     );

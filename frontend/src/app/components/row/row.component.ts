@@ -14,30 +14,31 @@ export class RowComponent implements OnInit {
   @Input() repositories: Repository[];
   @Input() row: Row;
 
-  @Output() isRepoSelected = new EventEmitter();
-
-  branches: Branch[];
-  commits: Commit[];
-
+  @Output() repoSelected = new EventEmitter();
+  @Output() branchSelected = new EventEmitter();
+  @Output() commitSelected = new EventEmitter();
   constructor(private backendApiService: BackendAPIService) {}
 
   ngOnInit() {}
 
   onSelectRepo(e) {
-    this.isRepoSelected.emit({
+    this.repoSelected.emit({
       repoId: e.target.value,
       rowIndex: this.row.rowIndex
     });
   }
 
   onSelectBranch(e) {
-    const branchName = e.target.value;
-    this.selectedBranchName = branchName;
-    this.backendApiService
-      .getCommitsOfRepo(this.selectedRepoId, branchName)
-      .subscribe(commits => {
-        this.commits = commits;
-        console.log(this.commits);
-      });
+    this.branchSelected.emit({
+      rowIndex: this.row.rowIndex,
+      branchName: e.target.value
+    });
+  }
+
+  onSelectCommit(e) {
+    this.commitSelected.emit({
+      rowIndex: this.row.rowIndex,
+      commitSHA: e.target.value
+    });
   }
 }
