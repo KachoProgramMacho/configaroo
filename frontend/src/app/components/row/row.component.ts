@@ -1,8 +1,9 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Input, Output, EventEmitter } from "@angular/core";
 import { Repository } from "src/app/models/Repository";
 import { Branch } from "src/app/models/Branch";
 import { BackendAPIService } from "../../services/backend-api.service";
 import { Commit } from "src/app/models/Commit";
+import { Row } from "src/app/models/Row";
 
 @Component({
   selector: "app-row",
@@ -10,31 +11,22 @@ import { Commit } from "src/app/models/Commit";
   styleUrls: ["./row.component.css"]
 })
 export class RowComponent implements OnInit {
-  repositories: Repository[];
+  @Input() repositories: Repository[];
+  @Input() row: Row;
+
+  @Output() isRepoSelected = new EventEmitter();
+
   branches: Branch[];
   commits: Commit[];
 
-  selectedRepoId: string;
-  selectedBranchName: string;
-  selectedCommitIndex: number;
+  constructor(private backendApiService: BackendAPIService) {}
 
-  constructor(private backendApiService: BackendAPIService) {
-    this.selectedRepoId = "";
-    this.selectedBranchName = "";
-  }
-
-  ngOnInit() {
-    this.backendApiService.getRepositories().subscribe(repositories => {
-      this.repositories = repositories;
-    });
-  }
+  ngOnInit() {}
 
   onSelectRepo(e) {
-    const repoId = e.target.value;
-    this.selectedRepoId = repoId;
-    //1.) Send request to fetch all the branches for the given repo
-    this.backendApiService.getBranchesOfRepo(repoId).subscribe(branches => {
-      this.branches = branches;
+    this.isRepoSelected.emit({
+      repoId: e.target.value,
+      rowIndex: this.row.rowIndex
     });
   }
 

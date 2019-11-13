@@ -1,4 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { Row } from "src/app/models/Row";
+import { BackendAPIService } from "../../services/backend-api.service";
+import { Repository } from "src/app/models/Repository";
 
 @Component({
   selector: "app-config-form",
@@ -6,31 +9,39 @@ import { Component, OnInit } from "@angular/core";
   styleUrls: ["./config-form.component.css"]
 })
 export class ConfigFormComponent implements OnInit {
-  numberOfRows: number;
-  rows: number[]; //dummy variable for rendering lists
+  rows: Row[];
+  repositories: Repository[];
+  selectedRepoId: string;
 
-  constructor() {
-    this.numberOfRows = 1;
-    this.updateRows();
+  constructor(private backendApiService: BackendAPIService) {
+    this.rows = [];
   }
 
-  ngOnInit() {}
-
-  onAddRow(e) {
-    console.log("hehe");
-
-    this.numberOfRows += 1;
-    this.updateRows();
+  ngOnInit() {
+    this.backendApiService.getRepositories().subscribe(repositories => {
+      this.repositories = repositories;
+    });
   }
 
   onRemoveRow(e) {
-    if(this.numberOfRows > 0) {
-      this.numberOfRows -= 1;
-      this.updateRows();
+    if (1 > 0) {
     }
   }
 
-  updateRows() {
-    this.rows = Array(this.numberOfRows).fill(0);
+  onCreateConfig(e) {}
+
+  onRepoSelected(repoId: string, rowIndex: number) {
+    console.log(repoId, rowIndex);
+
+    // this.selectedRepoId = repoId;
+    // //1.) Send request to fetch all the branches for the given repo
+    // this.backendApiService.getBranchesOfRepo(repoId).subscribe(branches => {
+    //   this.branches = branches;
+    // });
+  }
+
+  onAddRow(e) {
+    const firstRow = new Row(this.rows.length, "", "", 0);
+    this.rows.push(firstRow);
   }
 }

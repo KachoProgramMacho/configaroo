@@ -1,6 +1,15 @@
 <div *ngFor="let row of rows">
-  <app-row></app-row>
+  <app-row
+    [row]="row"
+    [repositories]="repositories"
+    (isRepoSelected)="onRepoSelected($event)"
+  ></app-row>
 </div>
 
 <button (click)="onAddRow($event)">Add+</button>
 <button (click)="onRemoveRow($event)">Remove-</button>
+
+<div>
+  <input type="text" />
+  <button (click)="onCreateConfig($event)">Create Configuration</button>
+</div>
