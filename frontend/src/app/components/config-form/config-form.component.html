@@ -1,17 +1,37 @@
-<div *ngFor="let row of rows">
-  <app-row
-    [row]="row"
-    [repositories]="repositories"
-    (repoSelected)="onRepoSelected($event)"
-    (branchSelected)="onBranchSelected($event)"
-    (commitSelected)="onCommitSelected($event)"
-  ></app-row>
-</div>
+<div class="container border border-secondary rounded">
+  <div class="row d-flex justify-content-center m-2">
+    <div class="form-group">
+      <input
+        type="text"
+        (change)="onRepoNameChange($event)"
+        class="form-control"
+        id="repo-name"
+        placeholder="Enter Repository Name ..."
+      />
+    </div>
+  </div>
 
-<button (click)="onAddRow($event)">Add+</button>
-<button (click)="onRemoveRow($event)">Remove-</button>
+  <div class="row d-flex justify-content-center m-2 p-2">
+    <button class="m-1 btn btn-outline-info" (click)="onAddRow($event)">
+      Add+
+    </button>
+    <button class="m-1 btn btn-outline-danger" (click)="onRemoveRow($event)">
+      Remove-
+    </button>
+  </div>
 
-<div>
-  <input type="text" (change)="onRepoNameChange($event)" />
-  <button (click)="onCreateConfig($event)">Create Configuration</button>
+  <div class="row d-flex justify-content-center m-2" *ngFor="let row of rows">
+    <app-row
+      [row]="row"
+      [repositories]="repositories"
+      (repoSelected)="onRepoSelected($event)"
+      (branchSelected)="onBranchSelected($event)"
+      (commitSelected)="onCommitSelected($event)"
+    ></app-row>
+  </div>
+  <div class="row d-flex justify-content-center m-2">
+    <button class="btn btn-outline-warning" (click)="onCreateConfig($event)">
+      {{ isLoading ? "Loading..." : "Create Configuration" }}
+    </button>
+  </div>
 </div>

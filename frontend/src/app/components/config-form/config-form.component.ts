@@ -17,10 +17,12 @@ export class ConfigFormComponent implements OnInit {
   repositories: Repository[];
   selectedRepoId: string;
   repoName: string;
+  isLoading: boolean;
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
+    this.isLoading = false;
   }
 
   ngOnInit() {
@@ -29,12 +31,19 @@ export class ConfigFormComponent implements OnInit {
     });
   }
 
+  onAddRow(e) {
+    const firstRow = new Row(this.rows.length, [], [], "", "", "");
+    this.rows.push(firstRow);
+  }
+
   onRemoveRow(e) {
-    if (1 > 0) {
+    if (this.rows.length > 0) {
+      this.rows.pop();
     }
   }
 
   onCreateConfig(e) {
+    this.isLoading = true;
     const configRepoSubmodules = this.rows.map(row => {
       return new Submodule(
         row.selectedRepoId,
@@ -51,6 +60,8 @@ export class ConfigFormComponent implements OnInit {
       .createRepository(newConfigurationRepo)
       .subscribe(storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
+        alert("Configuration successfully created");
+        this.isLoading = false;
       });
   }
 
@@ -76,11 +87,6 @@ export class ConfigFormComponent implements OnInit {
   onCommitSelected({ commitSHA, rowIndex }) {
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
-  }
-
-  onAddRow(e) {
-    const firstRow = new Row(this.rows.length, [], [], "", "", "");
-    this.rows.push(firstRow);
   }
 
   onRepoNameChange(e) {

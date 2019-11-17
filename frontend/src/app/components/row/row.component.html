@@ -1,4 +1,6 @@
-<select (change)="onSelectRepo($event)">
+<h6 class="text-muted">Submodule: {{ row.rowIndex + 1 }}</h6>
+<hr />
+<select class="form-control" (change)="onSelectRepo($event)">
   <option value="">
     Select repository...
   </option>
@@ -7,7 +9,7 @@
   </option>
 </select>
 
-<select (change)="onSelectBranch($event)">
+<select class="form-control" (change)="onSelectBranch($event)">
   <option value="">
     Select branch...
   </option>
@@ -16,7 +18,7 @@
   </option>
 </select>
 
-<select (change)="onSelectCommit($event)">
+<select class="form-control" (change)="onSelectCommit($event)">
   <option value="">
     Select commit...
   </option>
@@ -24,3 +26,4 @@
     {{ commit.sha }}
   </option>
 </select>
+<div class="mb-4"></div>
