@@ -45,7 +45,11 @@ public class GithubAPIController {
     public ConfigurationRepositoryModel createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
 
         githubAPIService.createRepository(configurationRepositoryModel);
+        //TODO: CREATE method for adding submodules to the repository
+        githubAPIService.addSubmodulesToRepository(configurationRepositoryModel);
+
         repositoryParser.saveNewConfiguration(configurationRepositoryModel);
+
         return configurationRepositoryModel;
     }
 
