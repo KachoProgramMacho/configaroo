@@ -176,21 +176,14 @@ public class GithubAPIService {
         JSONObject requestBody = new JSONObject();
         requestBody.put("sha", treeCommitSHA);
         requestBody.put("force", true);
-
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
 
 
         HttpEntity<String> commitTreeRequest = new HttpEntity<>(requestBody.toString(), headers);
-//        HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-//        RestTemplate restTemplate = new RestTemplate(requestFactory);
-
         return restTemplate.exchange(url, HttpMethod.PATCH, commitTreeRequest, String.class);
 
-
-       // return restTemplate.patchForObject(url,commitTreeRequest,String.class);
     }
 
     public ResponseEntity<String> deleteRepository(RepositoryModel repoToDelete){
