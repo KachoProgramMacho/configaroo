@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row d-flex justify-content-center">
+    <div class="col-sm-5" *ngFor="let repo of repositories">
+      <div class="card m-4">
+        <div class="card-body">
+          <h5 class="card-title">{{ repo.repo }}</h5>
+          <hr />
+          <p class="card-text text-muted">
+            <strong>Owner:</strong>
+            {{ repo.owner }}
+          </p>
+          <p class="card-text text-muted">
+            <strong>Type:</strong>
+            {{ repo.type }}
+          </p>
+          <p class="card-text text-muted">
+            <strong>URL:</strong> {{ repo.url }}
+          </p>
+          <div class="container d-flex justify-content-center">
+            <button
+              class="btn btn-outline-danger"
+              (click)="onDeleteRepo($event)"
+              value="{{ repo.id }}"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

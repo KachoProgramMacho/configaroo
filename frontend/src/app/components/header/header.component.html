@@ -1,5 +1,5 @@
 <!-- Just an image -->
-<nav class="navbar navbar-light bg-light" id="my-header">
+<nav class="navbar navbar-light navbar-expand-lg bg-light" id="my-header">
   <a class="navbar-brand" href="/">
     <img
       src="../../../assets/configaroo_logo.png"
@@ -11,4 +11,29 @@
       CONFIGAROO
     </span>
   </a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse w-100" id="navbarNav">
+    <ul class="navbar-nav ml-auto p-3">
+      <li class="nav-item active">
+        <a class="nav-link" style="font-size:1.5rem;" routerLink="/"
+          >Home <span class="sr-only">(current)</span></a
+        >
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="font-size:1.5rem;" routerLink="/edit"
+          >Edit</a
+        >
+      </li>
+    </ul>
+  </div>
 </nav>

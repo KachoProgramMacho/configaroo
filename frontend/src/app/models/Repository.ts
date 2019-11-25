@@ -4,5 +4,6 @@ export class Repository {
   type: string;
   url: string;
   owner: string;
+  finalized: boolean;
   submodules: number[];
 }
