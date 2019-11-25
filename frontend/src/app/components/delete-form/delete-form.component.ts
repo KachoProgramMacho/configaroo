@@ -27,6 +27,7 @@ export class DeleteFormComponent implements OnInit {
     this.backendApiService
       .deleteConfigurationRepository(repoId)
       .subscribe(repository => {
+        this.repositories = this.repositories.filter(repo => repo.id != repoId);
         alert("Repository successfully deleted");
       });
   }
