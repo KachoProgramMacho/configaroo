@@ -3,6 +3,7 @@ package amos.group3.gitmodconfig_backend.services;
 import amos.group3.gitmodconfig_backend.models.*;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,9 +13,11 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -38,7 +41,7 @@ public class GithubAPIService {
 
     public GithubAPIService(RestTemplateBuilder restTemplateBuilder){
         this.restTemplate = restTemplateBuilder.build();
-        HttpClient httpClient = HttpClients.createDefault();
+        HttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
         HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
         requestFactory.setConnectTimeout(4400);
         requestFactory.setReadTimeout(5456);
@@ -186,7 +189,16 @@ public class GithubAPIService {
 
     }
 
-    public ResponseEntity<String> deleteRepository(RepositoryModel repoToDelete){
-        return null;
+    public void deleteRepository(RepositoryModel repoToDelete) throws RestClientException {
+        final String deleteUrl = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + repoToDelete.getRepo();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+
+        HttpEntity deleteRequest = new HttpEntity(headers);
+
+        restTemplate.exchange(deleteUrl, HttpMethod.DELETE, deleteRequest, String.class);
     }
 }
