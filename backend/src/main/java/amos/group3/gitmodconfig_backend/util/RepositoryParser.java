@@ -67,15 +67,22 @@ public class RepositoryParser {
                 .id(generateId())
                 .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+configurationRepositoryModel.getName())
                 .type("configuration")
+                .finalized(false)
                 .submodules(submodules).build();
         repositories.add(newRepo);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File("src\\main\\resources\\repositories.json"), repositories);
-        } catch (IOException e) {
-            e.printStackTrace();
+        this.writeRepositoriesToJSONFile(repositories);
+        return newRepo;
+    }
+
+    public RepositoryModel deleteRepository(int id){
+        RepositoryModel repoToDelete = this.getRepositoryById(id);
+        if(!repoToDelete.isFinalized() && repoToDelete.getType().equals("configuration")){
+            repositories.remove(repoToDelete);
+            this.writeRepositoriesToJSONFile(repositories);
+            return repoToDelete;
+        }else {
+            return null;
         }
-        return null;
     }
 
     public int getIdByRepositoryName(String name){
@@ -83,10 +90,9 @@ public class RepositoryParser {
                 .findFirst().get().getId();
     }
 
-    //return max id value +1
-    public int generateId(){
-        return repositories.stream().map(RepositoryModel::getId)
-                .max(Comparator.comparing(i -> i)).get()+1;
+    public ArrayList<RepositoryModel> getNotFinalizedConfigurationRepositories(){
+        return repositories.stream().filter(repositoryModel -> !repositoryModel.isFinalized() && repositoryModel.getType().equals("configuration"))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public String printRepositories(){
@@ -95,5 +101,20 @@ public class RepositoryParser {
 
     public ArrayList<RepositoryModel> getRepositories(){
         return this.repositories;
+    }
+
+    //return max id value +1
+    private int generateId(){
+        return repositories.stream().map(RepositoryModel::getId)
+                .max(Comparator.comparing(i -> i)).get()+1;
+    }
+
+    private void writeRepositoriesToJSONFile(ArrayList<RepositoryModel> repositories){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            objectMapper.writeValue(new File("src\\main\\resources\\repositories.json"), repositories);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

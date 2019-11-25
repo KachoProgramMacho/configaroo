@@ -4,6 +4,7 @@
     "repo": "AMOS_HMI-Output",
     "type": "content",
     "url": "https://github.com/stubb/AMOS_HMI-Output",
+    "finalized": false,
     "owner": "stubb",
     "submodules": []
   },
@@ -13,6 +14,7 @@
     "type": "content",
     "url": "https://github.com/stubb/AMOS_InputConsole",
     "owner": "stubb",
+    "finalized": false,
     "submodules": []
   },
   {
@@ -21,6 +23,7 @@
     "type": "configuration",
     "url": "https://github.com/amosDummy/vlizameVGIthub",
     "owner": "amosDummy",
+    "finalized": false,
     "submodules": [
       1,
       2

@@ -192,4 +192,8 @@ public class GithubAPIService {
 
        // return restTemplate.patchForObject(url,commitTreeRequest,String.class);
     }
+
+    public ResponseEntity<String> deleteRepository(RepositoryModel repoToDelete){
+        return null;
+    }
 }

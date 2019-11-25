@@ -19,5 +19,7 @@ public class RepositoryModel {
 
     private String owner;
 
+    private boolean finalized;
+
     private int[] submodules;
 }
