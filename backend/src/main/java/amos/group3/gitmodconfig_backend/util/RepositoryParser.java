@@ -53,7 +53,7 @@ public class RepositoryParser {
 
     public RepositoryModel getRepositoryById(int id){
         return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst()
-                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find resource"));
+                .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find repository with ID: "+id));
 
     }
 
@@ -85,13 +85,26 @@ public class RepositoryParser {
         }
     }
 
+    public RepositoryModel finalizeRepository(int id){
+        RepositoryModel toBeFinalized = this.getRepositoryById(id);
+        if(toBeFinalized==null){
+            return null;
+        }else {
+            repositories.remove(toBeFinalized);
+            toBeFinalized.setFinalized(true);
+            repositories.add(toBeFinalized);
+            writeRepositoriesToJSONFile(repositories);
+        }
+        return toBeFinalized;
+    }
+
     public int getIdByRepositoryName(String name){
         return repositories.stream().filter(repositoryModel -> repositoryModel.getRepo().equals(name))
                 .findFirst().get().getId();
     }
 
     public ArrayList<RepositoryModel> getNotFinalizedConfigurationRepositories(){
-        return repositories.stream().filter(repositoryModel -> !repositoryModel.isFinalized() && repositoryModel.getType().equals("configuration"))
+        return repositories.stream().filter(repositoryModel -> !repositoryModel.isFinalized())
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

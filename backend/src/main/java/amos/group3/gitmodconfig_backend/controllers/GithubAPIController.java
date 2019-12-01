@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 public class GithubAPIController {
@@ -32,15 +33,34 @@ public class GithubAPIController {
     public ArrayList<RepositoryModel> getRepositories(){
         return repositoryParser.getRepositories();
     }
-
+/*
     @GetMapping("/api/configuration-repository")
     public ArrayList<RepositoryModel> getNotFinalizedConfigurationRepositories(){
         return repositoryParser.getNotFinalizedConfigurationRepositories();
+    }*/
+
+    @PutMapping("/api/repository/{repositoryId}")
+    public ResponseEntity<RepositoryModel> finalizeRepository(@PathVariable int repositoryId){
+        try{
+            RepositoryModel finalized = repositoryParser.finalizeRepository(repositoryId);
+            if(finalized != null){
+                return new ResponseEntity<>(finalized, OK);
+            }else {
+                return new ResponseEntity<>(NOT_FOUND);
+            }
+        }catch (ResponseStatusException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @DeleteMapping("/api/configuration-repository/{repositoryId}")
+    @DeleteMapping("/api/repository/{repositoryId}")
     public ResponseEntity<RepositoryModel> deleteConfigurationRepository(@PathVariable int repositoryId){
-        RepositoryModel repoToDelete = repositoryParser.deleteRepository(repositoryId);
+        RepositoryModel repoToDelete;
+        try{
+            repoToDelete = repositoryParser.deleteRepository(repositoryId);
+        }catch (ResponseStatusException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         if(repoToDelete != null){
             githubAPIService.deleteRepository(repoToDelete);
             return new ResponseEntity<RepositoryModel>(repoToDelete, HttpStatus.OK);
@@ -63,7 +83,7 @@ public class GithubAPIController {
     public ConfigurationRepositoryModel createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
 
         githubAPIService.createRepository(configurationRepositoryModel);
-        //TODO: CREATE method for adding submodules to the repository
+
         githubAPIService.addSubmodulesToRepository(configurationRepositoryModel);
 
         repositoryParser.saveNewConfiguration(configurationRepositoryModel);
