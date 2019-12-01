@@ -39,8 +39,8 @@ public class GithubAPIController {
         return repositoryParser.getNotFinalizedConfigurationRepositories();
     }*/
 
-    @PutMapping("/api/repository/{repositoryId}")
-    public ResponseEntity<RepositoryModel> finalizeRepository(@PathVariable int repositoryId){
+    @PutMapping("/api/repository/{repositoryId}/finalize")
+    public ResponseEntity<RepositoryModel> editRepository(@PathVariable int repositoryId){
         try{
             RepositoryModel finalized = repositoryParser.finalizeRepository(repositoryId);
             if(finalized != null){
