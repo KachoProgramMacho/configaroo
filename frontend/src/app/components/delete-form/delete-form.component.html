@@ -18,7 +18,15 @@
           </p>
           <div class="container d-flex justify-content-center">
             <button
-              class="btn btn-outline-danger"
+              class="btn btn-outline-info m-1"
+              (click)="onFinalizeRepo($event)"
+              value="{{ repo.id }}"
+            >
+              Finalize
+            </button>
+            <button class="btn btn-outline-warning m-1">Edit</button>
+            <button
+              class="btn btn-outline-danger m-1"
               (click)="onDeleteRepo($event)"
               value="{{ repo.id }}"
             >

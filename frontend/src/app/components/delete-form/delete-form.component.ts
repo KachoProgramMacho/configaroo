@@ -15,20 +15,24 @@ export class DeleteFormComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.backendApiService
-      .getConfigurationRepositoriesToDelete()
-      .subscribe(repositories => {
-        this.repositories = repositories;
-      });
+    // Get All Repositories and filter only the ones that are not finalized
+    this.backendApiService.getRepositories().subscribe(repositories => {
+      this.repositories = repositories.filter(repo => !repo.finalized);
+    });
   }
 
   onDeleteRepo(e) {
     const repoId = e.target.value;
-    this.backendApiService
-      .deleteConfigurationRepository(repoId)
-      .subscribe(repository => {
-        this.repositories = this.repositories.filter(repo => repo.id != repoId);
-        alert("Repository successfully deleted");
-      });
+    this.backendApiService.deleteRepository(repoId).subscribe(repository => {
+      this.repositories = this.repositories.filter(repo => repo.id != repoId);
+      alert("Repository successfully deleted");
+    });
+  }
+
+  onFinalizeRepo(e) {
+    const repoId = e.target.value;
+    this.backendApiService.finalizeRepository(repoId).subscribe(repository => {
+      alert("Repository successfully Finalized");
+    });
   }
 }

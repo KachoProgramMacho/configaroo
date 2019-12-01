@@ -18,12 +18,6 @@ export class BackendAPIService {
     return this.http.get<Repository[]>(`${this.backendUrl}/repository`);
   }
 
-  getConfigurationRepositoriesToDelete(): Observable<Repository[]> {
-    return this.http.get<Repository[]>(
-      `${this.backendUrl}/configuration-repository`
-    );
-  }
-
   getBranchesOfRepo(repoId): Observable<Branch[]> {
     console.log("WTF", repoId);
 
@@ -47,9 +41,14 @@ export class BackendAPIService {
     );
   }
 
-  deleteConfigurationRepository(id: number): Observable<Repository> {
-    return this.http.delete<Repository>(
-      `${this.backendUrl}/configuration-repository/${id}`
+  deleteRepository(id: number): Observable<Repository> {
+    return this.http.delete<Repository>(`${this.backendUrl}/repository/${id}`);
+  }
+
+  finalizeRepository(id: number): Observable<Repository> {
+    return this.http.put<Repository>(
+      `${this.backendUrl}/repository/${id}/finalize`,
+      {}
     );
   }
 }
