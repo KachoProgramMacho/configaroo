@@ -9,9 +9,15 @@ import { BackendAPIService } from "../../services/backend-api.service";
 })
 export class DeleteFormComponent implements OnInit {
   repositories: Repository[];
+  loadingDelete: boolean;
+  loadingEdit: boolean;
+  loadingFinalize: boolean;
 
   constructor(private backendApiService: BackendAPIService) {
     this.repositories = [];
+    this.loadingDelete = false;
+    this.loadingEdit = false;
+    this.loadingFinalize = false;
   }
 
   ngOnInit() {
@@ -22,16 +28,21 @@ export class DeleteFormComponent implements OnInit {
   }
 
   onDeleteRepo(e) {
+    this.loadingDelete = true;
     const repoId = e.target.value;
     this.backendApiService.deleteRepository(repoId).subscribe(repository => {
       this.repositories = this.repositories.filter(repo => repo.id != repoId);
+      this.loadingDelete = false;
       alert("Repository successfully deleted");
     });
   }
 
   onFinalizeRepo(e) {
+    this.loadingFinalize = true;
     const repoId = e.target.value;
     this.backendApiService.finalizeRepository(repoId).subscribe(repository => {
+      this.repositories = this.repositories.filter(repo => repo.id != repoId);
+      this.loadingFinalize = false;
       alert("Repository successfully Finalized");
     });
   }

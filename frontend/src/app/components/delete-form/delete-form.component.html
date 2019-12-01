@@ -22,7 +22,7 @@
               (click)="onFinalizeRepo($event)"
               value="{{ repo.id }}"
             >
-              Finalize
+              {{ loadingFinalize ? "Loading..." : "Finalize" }}
             </button>
             <button class="btn btn-outline-warning m-1">Edit</button>
             <button
@@ -30,7 +30,7 @@
               (click)="onDeleteRepo($event)"
               value="{{ repo.id }}"
             >
-              Delete
+              {{ loadingDelete ? "Loading..." : "Delete" }}
             </button>
           </div>
         </div>

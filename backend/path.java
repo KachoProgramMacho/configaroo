@@ -1,0 +1,1 @@
+: class path resource [repositories.json] cannot be resolved to URL because it does not exist

@@ -2,14 +2,12 @@ package amos.group3.gitmodconfig_backend.util;
 
 import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
-import amos.group3.gitmodconfig_backend.models.SubmoduleModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +16,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.NoSuchElementException;
-import java.util.logging.Logger;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -38,13 +33,13 @@ public class RepositoryParser {
 
     private ArrayList<RepositoryModel> repositories;
 
-    private Resource resource;
+
     @PostConstruct
     public void readJSONRepositoryFile(){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            resource=resourceLoader.getResource("classpath:repositories.json");
-            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(resource.getFile(), RepositoryModel[].class)));
+
+            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(new File("repositories.json"), RepositoryModel[].class)));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +120,8 @@ public class RepositoryParser {
     private void writeRepositoriesToJSONFile(ArrayList<RepositoryModel> repositories){
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            objectMapper.writeValue(new File("src\\main\\resources\\repositories.json"), repositories);
+
+            objectMapper.writeValue(new File("repositories.json"), repositories);
         } catch (IOException e) {
             e.printStackTrace();
         }
