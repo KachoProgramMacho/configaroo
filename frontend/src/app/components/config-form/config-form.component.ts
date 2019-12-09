@@ -18,17 +18,27 @@ export class ConfigFormComponent implements OnInit {
   selectedRepoId: string;
   repoName: string;
   isLoading: boolean;
+  errorMessage: string;
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
     this.isLoading = false;
+    this.errorMessage = "";
   }
 
   ngOnInit() {
-    this.backendApiService.getRepositories().subscribe(repositories => {
-      this.repositories = repositories;
-    });
+    this.backendApiService.getRepositories().subscribe(
+      repositories => {
+        this.repositories = repositories;
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 
   onAddRow(e) {
@@ -56,32 +66,54 @@ export class ConfigFormComponent implements OnInit {
       configRepoSubmodules
     );
 
-    this.backendApiService
-      .createRepository(newConfigurationRepo)
-      .subscribe(storedConfiguration => {
+    this.backendApiService.createRepository(newConfigurationRepo).subscribe(
+      storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
         alert("Configuration successfully created");
         this.isLoading = false;
-      });
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 
   onRepoSelected({ repoId, rowIndex }) {
     //1.) Send request to fetch all the branches for the given repo
-    this.backendApiService.getBranchesOfRepo(repoId).subscribe(branches => {
-      const currentRow = this.rows[rowIndex];
-      currentRow.selectedRepoId = repoId;
-      currentRow.branches = branches;
-    });
+    this.backendApiService.getBranchesOfRepo(repoId).subscribe(
+      branches => {
+        const currentRow = this.rows[rowIndex];
+        currentRow.selectedRepoId = repoId;
+        currentRow.branches = branches;
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 
   onBranchSelected({ branchName, rowIndex }) {
     this.backendApiService
       .getCommitsOfRepo(this.rows[rowIndex].selectedRepoId, branchName)
-      .subscribe(commits => {
-        const currentRow = this.rows[rowIndex];
-        currentRow.selectedBranchName = branchName;
-        currentRow.commits = commits;
-      });
+      .subscribe(
+        commits => {
+          const currentRow = this.rows[rowIndex];
+          currentRow.selectedBranchName = branchName;
+          currentRow.commits = commits;
+        },
+        err => {
+          this.errorMessage = err.message;
+          setTimeout(() => {
+            this.errorMessage = "";
+          }, 5000);
+        }
+      );
   }
 
   onCommitSelected({ commitSHA, rowIndex }) {

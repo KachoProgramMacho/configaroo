@@ -7,8 +7,8 @@ import { AppComponent } from "./app.component";
 import { HeaderComponent } from "./components/header/header.component";
 import { MainComponent } from "./components/main/main.component";
 import { ConfigFormComponent } from "./components/config-form/config-form.component";
-import { RowComponent } from './components/row/row.component';
-import { DeleteFormComponent } from './components/delete-form/delete-form.component';
+import { RowComponent } from "./components/row/row.component";
+import { EditFormComponent } from "./components/edit-form/edit-form.component";
 
 @NgModule({
   declarations: [
@@ -17,7 +17,7 @@ import { DeleteFormComponent } from './components/delete-form/delete-form.compon
     MainComponent,
     ConfigFormComponent,
     RowComponent,
-    DeleteFormComponent
+    EditFormComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
