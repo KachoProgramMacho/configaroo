@@ -17,8 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 public class GithubAPIController {
@@ -70,25 +69,39 @@ public class GithubAPIController {
     }
 
     @GetMapping("/api/repository/{repositoryId}/branches")
-    public BranchModel[] getBranchesOfRepository(@PathVariable int repositoryId){
-            return githubAPIService.getBranchesOfRepository(repositoryId);
+    public ResponseEntity<BranchModel[]> getBranchesOfRepository(@PathVariable int repositoryId){
+            ResponseEntity<BranchModel[]> responseEntity = githubAPIService.getBranchesOfRepository(repositoryId);
+            if(responseEntity.getStatusCode()!=OK){
+                return new ResponseEntity<>(BAD_REQUEST);
+            }else {
+                return new ResponseEntity<>(responseEntity.getBody(), OK);
+            }
     }
 
     @GetMapping("/api/repository/{repositoryId}/branches/{branchName}/commits")
-    public CommitModel[] getBranchesOfRepository(@PathVariable int repositoryId, @PathVariable String branchName){
-        return githubAPIService.getCommitsOfBranchOfRepository(repositoryId,branchName);
+    public ResponseEntity<CommitModel[]> getBranchesOfRepository(@PathVariable int repositoryId, @PathVariable String branchName){
+        ResponseEntity<CommitModel[]> responseEntity = githubAPIService.getCommitsOfBranchOfRepository(repositoryId,branchName);
+        if(responseEntity.getStatusCode()!=OK){
+            return new ResponseEntity<>(BAD_REQUEST);
+        }else {
+            return new ResponseEntity<>(responseEntity.getBody(), OK);
+        }
     }
 
     @PostMapping("/api/repository")
-    public ConfigurationRepositoryModel createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
+    public ResponseEntity<ConfigurationRepositoryModel> createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
 
-        githubAPIService.createRepository(configurationRepositoryModel);
-
+        ResponseEntity createRepoResponse = githubAPIService.createRepository(configurationRepositoryModel);
+        if(createRepoResponse.getStatusCode().equals(UNAUTHORIZED)){
+            return new ResponseEntity<>(UNAUTHORIZED);
+        }else if (createRepoResponse.getStatusCode().equals(UNPROCESSABLE_ENTITY)){
+            return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
+        }
         githubAPIService.addSubmodulesToRepository(configurationRepositoryModel);
 
         repositoryParser.saveNewConfiguration(configurationRepositoryModel);
 
-        return configurationRepositoryModel;
+        return new ResponseEntity<ConfigurationRepositoryModel>(configurationRepositoryModel, OK);
     }
 
 }

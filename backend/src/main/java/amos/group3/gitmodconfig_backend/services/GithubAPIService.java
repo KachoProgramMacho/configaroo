@@ -61,21 +61,21 @@ public class GithubAPIService {
 
     }
 
-    public BranchModel[] getBranchesOfRepository(int repositoryId){
+    public ResponseEntity<BranchModel[]> getBranchesOfRepository(int repositoryId){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
         final String branchesOfRepositoryURL = baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + selectedRepository.getRepo() + "/branches";
-        return restTemplate.getForObject(branchesOfRepositoryURL, BranchModel[].class);
+        return restTemplate.exchange(branchesOfRepositoryURL, HttpMethod.GET, null, BranchModel[].class);
     }
 
-    public CommitModel[] getCommitsOfBranchOfRepository(int repositoryId, String branchName){
+    public ResponseEntity<CommitModel[]> getCommitsOfBranchOfRepository(int repositoryId, String branchName){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
         final String commitsOfSelectedBranchURL = baseURL_Github + "/repos/" + selectedRepository.getOwner()
                 + "/" + selectedRepository.getRepo() + "/commits?sha="+branchName;
 
-        return this.restTemplate.getForObject(commitsOfSelectedBranchURL,CommitModel[].class);
+        return this.restTemplate.exchange(commitsOfSelectedBranchURL,HttpMethod.GET,null, CommitModel[].class);
     }
 
-    public String createRepository(ConfigurationRepositoryModel configurationRepositoryModel){
+    public ResponseEntity<String> createRepository(ConfigurationRepositoryModel configurationRepositoryModel){
 
         configurationRepositoryModel.setAuto_init(true);
 
@@ -85,7 +85,7 @@ public class GithubAPIService {
 
         HttpEntity<ConfigurationRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(configurationRepositoryModel, headers);
 
-        return restTemplate.postForObject(createRepositoryURL,createNewRepositoryPostRequest,String.class);
+        return restTemplate.exchange(createRepositoryURL, HttpMethod.POST,createNewRepositoryPostRequest,String.class);
     }
 
     public void addSubmodulesToRepository(ConfigurationRepositoryModel configurationRepositoryModel){
