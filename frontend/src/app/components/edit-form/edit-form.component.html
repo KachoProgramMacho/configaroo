@@ -2,42 +2,52 @@
   {{ errorMessage }}
 </div>
 <div class="container">
-  <div class="row d-flex justify-content-center">
-    <div class="col-sm-5" *ngFor="let repo of repositories">
-      <div class="card m-4">
-        <div class="card-body">
-          <h5 class="card-title">{{ repo.repo }}</h5>
-          <hr />
-          <p class="card-text text-muted">
-            <strong>Owner:</strong>
-            {{ repo.owner }}
-          </p>
-          <p class="card-text text-muted">
-            <strong>Type:</strong>
-            {{ repo.type }}
-          </p>
-          <p class="card-text text-muted">
-            <strong>URL:</strong> {{ repo.url }}
-          </p>
-          <div class="container d-flex justify-content-center">
-            <button
-              class="btn btn-outline-info m-1"
-              (click)="onFinalizeRepo($event)"
-              value="{{ repo.id }}"
-            >
-              {{ loadingFinalize ? "Loading..." : "Finalize" }}
-            </button>
-            <button class="btn btn-outline-warning m-1">Edit</button>
-            <button
-              class="btn btn-outline-danger m-1"
-              (click)="onDeleteRepo($event)"
-              value="{{ repo.id }}"
-            >
-              {{ loadingDelete ? "Loading..." : "Delete" }}
-            </button>
-          </div>
-        </div>
-      </div>
+  <div class="row">
+    <div class="col-10">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th class="d-none d-md-table-cell" scope="col">Owner</th>
+            <th scope="col">Type</th>
+            <th class="d-none d-lg-table-cell" scope="col">URL</th>
+            <th class="d-none d-md-table-cell" scope="col">Edit</th>
+            <th class="d-none d-md-table-cell" scope="col">Finalize</th>
+            <th class="d-none d-md-table-cell" scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let repo of repositories; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ repo.repo }}</td>
+            <td class="d-none d-md-table-cell">{{ repo.owner }}</td>
+            <td>{{ repo.type }}</td>
+            <td class="d-none d-lg-table-cell">{{ repo.url }}</td>
+            <td class="d-none d-md-table-cell">
+              <button class="btn btn-outline-warning m-1">Edit</button>
+            </td>
+            <td class="d-none d-md-table-cell">
+              <button
+                class="btn btn-outline-info m-1"
+                (click)="onFinalizeRepo($event)"
+                value="{{ repo.id }}"
+              >
+                {{ loadingFinalize ? "Loading..." : "Finalize" }}
+              </button>
+            </td>
+            <td class="d-none d-md-table-cell">
+              <button
+                class="btn btn-outline-danger m-1"
+                (click)="onDeleteRepo($event)"
+                value="{{ repo.id }}"
+              >
+                {{ loadingDelete ? "Loading..." : "Delete" }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
