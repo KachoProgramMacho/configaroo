@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -91,11 +92,15 @@ public class GithubAPIController {
     @PostMapping("/api/repository")
     public ResponseEntity<ConfigurationRepositoryModel> createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
 
-        ResponseEntity createRepoResponse = githubAPIService.createRepository(configurationRepositoryModel);
-        if(createRepoResponse.getStatusCode().equals(UNAUTHORIZED)){
-            return new ResponseEntity<>(UNAUTHORIZED);
-        }else if (createRepoResponse.getStatusCode().equals(UNPROCESSABLE_ENTITY)){
-            return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
+        try {
+            ResponseEntity createRepoResponse = githubAPIService.createRepository(configurationRepositoryModel);
+        }catch (HttpClientErrorException e){
+
+            if(e.getStatusCode().equals(UNAUTHORIZED)){
+                return new ResponseEntity<>(UNAUTHORIZED);
+            }else if (e.getStatusCode().equals(UNPROCESSABLE_ENTITY)){
+                return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
+            }
         }
         githubAPIService.addSubmodulesToRepository(configurationRepositoryModel);
 

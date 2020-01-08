@@ -13,6 +13,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -75,7 +76,7 @@ public class GithubAPIService {
         return this.restTemplate.exchange(commitsOfSelectedBranchURL,HttpMethod.GET,null, CommitModel[].class);
     }
 
-    public ResponseEntity<String> createRepository(ConfigurationRepositoryModel configurationRepositoryModel){
+    public ResponseEntity<String> createRepository(ConfigurationRepositoryModel configurationRepositoryModel) throws HttpClientErrorException {
 
         configurationRepositoryModel.setAuto_init(true);
 
