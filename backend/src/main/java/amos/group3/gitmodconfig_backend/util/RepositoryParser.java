@@ -1,11 +1,10 @@
 package amos.group3.gitmodconfig_backend.util;
 
-import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
+import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -39,7 +38,7 @@ public class RepositoryParser {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
-            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(new File("repositories.json"), RepositoryModel[].class)));
+            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(new File("src/main/resources/repositories.json"), RepositoryModel[].class)));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -52,16 +51,16 @@ public class RepositoryParser {
 
     }
 
-    public RepositoryModel saveNewConfiguration(ConfigurationRepositoryModel configurationRepositoryModel){
+    public RepositoryModel saveNewConfiguration(CreateRepositoryModel createRepositoryModel){
 
-        int[] submodules = Arrays.asList(configurationRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
+        int[] submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
                 .mapToInt(i->i).toArray();
         RepositoryModel newRepo = RepositoryModel.builder()
-                .repo(configurationRepositoryModel.getName())
+                .repo(createRepositoryModel.getName())
                 .owner(GITHUB_ACCOUNT_OWNER)
                 .id(generateId())
-                .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+configurationRepositoryModel.getName())
-                .type("configuration")
+                .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+ createRepositoryModel.getName())
+                .type(createRepositoryModel.isContentRepository() ? "content" : "configuration")
                 .finalized(false)
                 .submodules(submodules).build();
         repositories.add(newRepo);
@@ -121,7 +120,7 @@ public class RepositoryParser {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
-            objectMapper.writeValue(new File("repositories.json"), repositories);
+            objectMapper.writeValue(new File("src/main/resources/repositories.json"), repositories);
         } catch (IOException e) {
             e.printStackTrace();
         }

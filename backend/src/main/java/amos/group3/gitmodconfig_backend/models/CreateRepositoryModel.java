@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class ConfigurationRepositoryModel {
+public class CreateRepositoryModel {
     private String name;
 
     private SubmoduleModel[] submodules;
 
     private boolean auto_init;
+
+    private boolean contentRepository;
 }

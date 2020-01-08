@@ -76,40 +76,40 @@ public class GithubAPIService {
         return this.restTemplate.exchange(commitsOfSelectedBranchURL,HttpMethod.GET,null, CommitModel[].class);
     }
 
-    public ResponseEntity<String> createRepository(ConfigurationRepositoryModel configurationRepositoryModel) throws HttpClientErrorException {
+    public ResponseEntity<String> createRepository(CreateRepositoryModel createRepositoryModel) throws HttpClientErrorException {
 
-        configurationRepositoryModel.setAuto_init(true);
+        createRepositoryModel.setAuto_init(true);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
 
-        HttpEntity<ConfigurationRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(configurationRepositoryModel, headers);
+        HttpEntity<CreateRepositoryModel> createNewRepositoryPostRequest = new HttpEntity<>(createRepositoryModel, headers);
 
         return restTemplate.exchange(createRepositoryURL, HttpMethod.POST,createNewRepositoryPostRequest,String.class);
     }
 
-    public void addSubmodulesToRepository(ConfigurationRepositoryModel configurationRepositoryModel){
+    public void addSubmodulesToRepository(CreateRepositoryModel createRepositoryModel){
 
         final String commitsOfSelectedBranchURL = baseURL_Github + "/repos/" + GITHUB_ACCOUNT_OWNER
-                + "/" + configurationRepositoryModel.getName() + "/commits?sha=master";
+                + "/" + createRepositoryModel.getName() + "/commits?sha=master";
 
 
 
         //1.) Create a git tree
-        CommitModel treeCommit = createGitTree(configurationRepositoryModel);
+        CommitModel treeCommit = createGitTree(createRepositoryModel);
 
         //Get last commit of master branch
         CommitModel baseSHA = this.restTemplate.getForObject(commitsOfSelectedBranchURL,CommitModel[].class)[0];
 
         //2.)
-        CommitModel commit = commitGitTree(baseSHA.getSha(),  treeCommit.getSha(),  configurationRepositoryModel);
+        CommitModel commit = commitGitTree(baseSHA.getSha(),  treeCommit.getSha(), createRepositoryModel);
         //3.)
-        pushGitTree(commit.getSha(),  configurationRepositoryModel);
+        pushGitTree(commit.getSha(), createRepositoryModel);
 
     }
 
-    public CommitModel createGitTree(ConfigurationRepositoryModel configurationRepositoryModel){
+    public CommitModel createGitTree(CreateRepositoryModel createRepositoryModel){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);
@@ -128,7 +128,7 @@ public class GithubAPIService {
 
         treeContent.put(treeRoot);
 
-        SubmoduleModel[] submoduleModels = configurationRepositoryModel.getSubmodules();
+        SubmoduleModel[] submoduleModels = createRepositoryModel.getSubmodules();
 
         for(SubmoduleModel s:submoduleModels){
             //s.getRepositoryName returns ID and NOT a Name even though the method name suggests otherwise
@@ -156,11 +156,11 @@ public class GithubAPIService {
 
         HttpEntity<String> createNewGithubTreePostRequest = new HttpEntity<>(payload.toString(), headers);
 
-        return restTemplate.postForObject(baseURL_Github+"/repos/" + GITHUB_ACCOUNT_OWNER +"/" + configurationRepositoryModel.getName()+"/git/trees",createNewGithubTreePostRequest,CommitModel.class);
+        return restTemplate.postForObject(baseURL_Github+"/repos/" + GITHUB_ACCOUNT_OWNER +"/" + createRepositoryModel.getName()+"/git/trees",createNewGithubTreePostRequest,CommitModel.class);
     }
 
-    public CommitModel commitGitTree(String baseSHA, String treeSHA, ConfigurationRepositoryModel configurationRepositoryModel){
-        final String url = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + configurationRepositoryModel.getName() +"/git/commits";
+    public CommitModel commitGitTree(String baseSHA, String treeSHA, CreateRepositoryModel createRepositoryModel){
+        final String url = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + createRepositoryModel.getName() +"/git/commits";
         JSONObject requestBody = new JSONObject();
         requestBody.put("message", "add submodules");
         requestBody.put("tree", treeSHA);
@@ -175,8 +175,8 @@ public class GithubAPIService {
         return restTemplate.postForObject(url,commitTreeRequest,CommitModel.class);
     }
 
-    public ResponseEntity<String> pushGitTree(String treeCommitSHA, ConfigurationRepositoryModel configurationRepositoryModel){
-        final String url = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + configurationRepositoryModel.getName() +"/git/refs/heads/master";
+    public ResponseEntity<String> pushGitTree(String treeCommitSHA, CreateRepositoryModel createRepositoryModel){
+        final String url = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + createRepositoryModel.getName() +"/git/refs/heads/master";
         JSONObject requestBody = new JSONObject();
         requestBody.put("sha", treeCommitSHA);
         requestBody.put("force", true);

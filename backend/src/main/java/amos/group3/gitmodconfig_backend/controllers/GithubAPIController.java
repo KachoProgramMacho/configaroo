@@ -3,20 +3,18 @@ package amos.group3.gitmodconfig_backend.controllers;
 
 import amos.group3.gitmodconfig_backend.models.BranchModel;
 import amos.group3.gitmodconfig_backend.models.CommitModel;
-import amos.group3.gitmodconfig_backend.models.ConfigurationRepositoryModel;
+import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.services.GithubAPIService;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.NoSuchElementException;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -90,10 +88,10 @@ public class GithubAPIController {
     }
 
     @PostMapping("/api/repository")
-    public ResponseEntity<ConfigurationRepositoryModel> createRepository(@RequestBody ConfigurationRepositoryModel configurationRepositoryModel){
+    public ResponseEntity<CreateRepositoryModel> createRepository(@RequestBody CreateRepositoryModel createRepositoryModel){
 
         try {
-            ResponseEntity createRepoResponse = githubAPIService.createRepository(configurationRepositoryModel);
+            ResponseEntity createRepoResponse = githubAPIService.createRepository(createRepositoryModel);
         }catch (HttpClientErrorException e){
 
             if(e.getStatusCode().equals(UNAUTHORIZED)){
@@ -102,11 +100,12 @@ public class GithubAPIController {
                 return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
             }
         }
-        githubAPIService.addSubmodulesToRepository(configurationRepositoryModel);
+        if(!createRepositoryModel.isContentRepository()) {
+            githubAPIService.addSubmodulesToRepository(createRepositoryModel);
+        }
+        repositoryParser.saveNewConfiguration(createRepositoryModel);
 
-        repositoryParser.saveNewConfiguration(configurationRepositoryModel);
-
-        return new ResponseEntity<ConfigurationRepositoryModel>(configurationRepositoryModel, OK);
+        return new ResponseEntity<CreateRepositoryModel>(createRepositoryModel, OK);
     }
 
 }

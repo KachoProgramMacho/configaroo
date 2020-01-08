@@ -68,11 +68,11 @@ export class ConfigFormComponent implements OnInit {
       configRepoSubmodules,
       this.isContentRepository
     );
-
+    console.log(newRepo)
     this.backendApiService.createRepository(newRepo).subscribe(
       storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
-        alert("Configuration successfully created");
+        alert("Repository successfully created");
         this.isLoading = false;
       },
       err => {

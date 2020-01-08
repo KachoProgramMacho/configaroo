@@ -2,7 +2,7 @@ import { Submodule } from "./Submodule";
 
 export class CreateRepositoryModel {
   name: string;
-  isContentRepository: boolean;
+  contentRepository: boolean;
   submodules: Submodule[];
 
   constructor(
@@ -12,6 +12,6 @@ export class CreateRepositoryModel {
   ) {
     this.name = name;
     this.submodules = submodules;
-    this.isContentRepository = isContentRepository;
+    this.contentRepository = isContentRepository;
   }
 }
