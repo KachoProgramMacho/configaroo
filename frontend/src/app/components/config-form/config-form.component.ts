@@ -4,7 +4,7 @@ import { BackendAPIService } from "../../services/backend-api.service";
 import { Repository } from "src/app/models/Repository";
 import { Branch } from "src/app/models/Branch";
 import { Commit } from "src/app/models/Commit";
-import { ConfigurationRepositoryModel } from "src/app/models/ConfigurationRepositoryModel";
+import { CreateRepositoryModel } from "src/app/models/CreateRepositoryModel";
 import { Submodule } from "src/app/models/Submodule";
 
 @Component({
@@ -18,12 +18,14 @@ export class ConfigFormComponent implements OnInit {
   selectedRepoId: string;
   repoName: string;
   isLoading: boolean;
+  isContentRepository: boolean;
   errorMessage: string;
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
     this.isLoading = false;
+    this.isContentRepository = false;
     this.errorMessage = "";
   }
 
@@ -61,12 +63,13 @@ export class ConfigFormComponent implements OnInit {
         row.selectedCommitSHA
       );
     });
-    const newConfigurationRepo = new ConfigurationRepositoryModel(
+    const newRepo = new CreateRepositoryModel(
       this.repoName,
-      configRepoSubmodules
+      configRepoSubmodules,
+      this.isContentRepository
     );
 
-    this.backendApiService.createRepository(newConfigurationRepo).subscribe(
+    this.backendApiService.createRepository(newRepo).subscribe(
       storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
         alert("Configuration successfully created");

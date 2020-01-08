@@ -16,23 +16,38 @@
   </div>
 
   <div class="row d-flex justify-content-center m-2 p-2">
-    <button class="m-1 btn btn-outline-info" (click)="onAddRow($event)">
-      Add+
-    </button>
-    <button class="m-1 btn btn-outline-danger" (click)="onRemoveRow($event)">
-      Remove-
-    </button>
+    <div>
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [checked]="isContentRepository"
+        (change)="isContentRepository = !isContentRepository"
+      />
+      <label class="form-check-label">Content Repository</label>
+    </div>
   </div>
 
-  <div class="row d-flex justify-content-center m-2" *ngFor="let row of rows">
-    <app-row
-      [row]="row"
-      [repositories]="repositories"
-      (repoSelected)="onRepoSelected($event)"
-      (branchSelected)="onBranchSelected($event)"
-      (commitSelected)="onCommitSelected($event)"
-    ></app-row>
+  <div *ngIf="!isContentRepository">
+    <div class="row d-flex justify-content-center m-2 p-2">
+      <button class="m-1 btn btn-outline-info" (click)="onAddRow($event)">
+        Add+
+      </button>
+      <button class="m-1 btn btn-outline-danger" (click)="onRemoveRow($event)">
+        Remove-
+      </button>
+    </div>
+
+    <div class="row d-flex justify-content-center m-2" *ngFor="let row of rows">
+      <app-row
+        [row]="row"
+        [repositories]="repositories"
+        (repoSelected)="onRepoSelected($event)"
+        (branchSelected)="onBranchSelected($event)"
+        (commitSelected)="onCommitSelected($event)"
+      ></app-row>
+    </div>
   </div>
+
   <div class="row d-flex justify-content-center m-2">
     <button class="btn btn-outline-warning" (click)="onCreateConfig($event)">
       {{ isLoading ? "Loading..." : "Create Configuration" }}

@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Repository } from "../models/Repository";
 import { Branch } from "../models/Branch";
 import { Commit } from "../models/Commit";
-import { ConfigurationRepositoryModel } from "../models/ConfigurationRepositoryModel";
+import { CreateRepositoryModel } from "../models/CreateRepositoryModel";
 
 @Injectable({
   providedIn: "root"
@@ -33,9 +33,9 @@ export class BackendAPIService {
   }
 
   createRepository(
-    newConfigurationRepository: ConfigurationRepositoryModel
-  ): Observable<ConfigurationRepositoryModel> {
-    return this.http.post<ConfigurationRepositoryModel>(
+    newConfigurationRepository: CreateRepositoryModel
+  ): Observable<CreateRepositoryModel> {
+    return this.http.post<CreateRepositoryModel>(
       `${this.backendUrl}/repository`,
       newConfigurationRepository
     );
