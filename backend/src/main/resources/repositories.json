@@ -30,23 +30,23 @@
     ]
   },
   {
-    "id": 4,
-    "repo": "aaa",
-    "type": "configuration",
-    "url": "https://github.com/amosDummy/aaa",
-    "owner": "amosDummy",
-    "finalized": false,
-    "submodules": [
-      1
-    ]
-  },
-  {
     "id": 5,
     "repo": "contenttttt",
     "type": "content",
     "url": "https://github.com/amosDummy/contenttttt",
     "owner": "amosDummy",
-    "finalized": false,
+    "finalized": true,
     "submodules": []
+  },
+  {
+    "id": 4,
+    "repo": "aaa",
+    "type": "configuration",
+    "url": "https://github.com/amosDummy/aaa",
+    "owner": "amosDummy",
+    "finalized": true,
+    "submodules": [
+      1
+    ]
   }
 ]
