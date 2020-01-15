@@ -68,7 +68,7 @@ export class ConfigFormComponent implements OnInit {
       configRepoSubmodules,
       this.isContentRepository
     );
-    console.log(newRepo)
+    console.log(newRepo);
     this.backendApiService.createRepository(newRepo).subscribe(
       storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
@@ -122,6 +122,10 @@ export class ConfigFormComponent implements OnInit {
   onCommitSelected({ commitSHA, rowIndex }) {
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
+  }
+
+  onModalClick(e) {
+    console.log(e.target.value);
   }
 
   onRepoNameChange(e) {
