@@ -1,10 +1,7 @@
 package amos.group3.gitmodconfig_backend.controllers;
 
 
-import amos.group3.gitmodconfig_backend.models.BranchModel;
-import amos.group3.gitmodconfig_backend.models.CommitModel;
-import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
-import amos.group3.gitmodconfig_backend.models.RepositoryModel;
+import amos.group3.gitmodconfig_backend.models.*;
 import amos.group3.gitmodconfig_backend.services.GithubAPIService;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,22 @@ public class GithubAPIController {
     @GetMapping("/api/repository")
     public ArrayList<RepositoryModel> getRepositories(){
         return repositoryParser.getRepositories();
+    }
+
+    @GetMapping("/api/repository/{repositoryId}/submodules")
+    public ResponseEntity<SubmoduleModel[]> getRepositorySubmodules(@PathVariable int repositoryId){
+        RepositoryModel currentRepo = repositoryParser.getRepositoryById(repositoryId);
+        SubmoduleModel[] allSubmodulesOfCurrentRepo = new SubmoduleModel[currentRepo.getSubmodules().length];
+        for(int i = 0 ; i < currentRepo.getSubmodules().length;i++){
+            SubmoduleModel currentSubmodule = SubmoduleModel.builder()
+                    .repositoryName(currentRepo.getSubmoduleRepositoryNames()[i])
+                    .branchName(currentRepo.getSubmoduleRepositoryBranchNames()[i])
+                    .commitSHA(currentRepo.getSubmoduleRepositoryCommits()[i])
+                    .build();
+            allSubmodulesOfCurrentRepo[i] = currentSubmodule;
+        }
+
+        return new ResponseEntity<SubmoduleModel[]>(allSubmodulesOfCurrentRepo, OK);
     }
 
     @PutMapping("/api/repository/{repositoryId}/edit")

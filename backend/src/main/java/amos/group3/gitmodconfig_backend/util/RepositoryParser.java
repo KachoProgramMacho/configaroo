@@ -55,6 +55,20 @@ public class RepositoryParser {
 
         int[] submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
                 .mapToInt(i->i).toArray();
+
+        String[] submoduleRepositoryNames = new String[submodules.length];
+        String[] submoduleBranchNames = new String[submodules.length];
+        String[] submoduleCommits = new String[submodules.length];
+        int  i = 0;
+         Arrays.asList(createRepositoryModel.getSubmodules()).forEach(submoduleModel -> {
+            String repositoryName = submoduleModel.getRepositoryName();
+            String branchName = submoduleModel.getBranchName();
+            String commit = submoduleModel.getCommitSHA();
+            submoduleRepositoryNames[i] = repositoryName;
+            submoduleBranchNames[i] = branchName;
+            submoduleCommits[i] = commit;
+        });
+
         RepositoryModel newRepo = RepositoryModel.builder()
                 .repo(createRepositoryModel.getName())
                 .owner(GITHUB_ACCOUNT_OWNER)
@@ -62,7 +76,11 @@ public class RepositoryParser {
                 .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+ createRepositoryModel.getName())
                 .type(createRepositoryModel.isContentRepository() ? "content" : "configuration")
                 .finalized(false)
-                .submodules(submodules).build();
+                .submodules(submodules)
+                .submoduleRepositoryNames(submoduleRepositoryNames)
+                .submoduleRepositoryBranchNames(submoduleBranchNames)
+                .submoduleRepositoryCommits(submoduleCommits)
+                .build();
         repositories.add(newRepo);
         this.writeRepositoriesToJSONFile(repositories);
         return newRepo;

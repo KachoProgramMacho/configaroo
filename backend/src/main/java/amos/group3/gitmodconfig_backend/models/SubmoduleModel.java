@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 public class SubmoduleModel {
     private String repositoryName;
     private String branchName;
