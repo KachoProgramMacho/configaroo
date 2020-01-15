@@ -31,14 +31,34 @@ public class GithubAPIController {
     public ArrayList<RepositoryModel> getRepositories(){
         return repositoryParser.getRepositories();
     }
-/*
-    @GetMapping("/api/configuration-repository")
-    public ArrayList<RepositoryModel> getNotFinalizedConfigurationRepositories(){
-        return repositoryParser.getNotFinalizedConfigurationRepositories();
-    }*/
+
+    @PutMapping("/api/repository/{repositoryId}/edit")
+    public ResponseEntity<CreateRepositoryModel> editRepository(@PathVariable int repositoryId, @RequestBody CreateRepositoryModel createRepositoryModel){
+
+       // 1.) Delete Old Configuration Repository Locally
+        RepositoryModel repoToDelete = repositoryParser.deleteRepository(repositoryId);
+
+        // 2.) delete Old Configuration repository from github
+        if(repoToDelete != null) {
+            githubAPIService.deleteRepository(repoToDelete);
+        }
+
+        // 3.) Create new local configuration repository
+        ResponseEntity createRepoResponse = githubAPIService.createRepository(createRepositoryModel);
+
+
+       // 4.) Create new Configuration Repository using the git tree functions
+        if(!createRepositoryModel.isContentRepository()) {
+            githubAPIService.addSubmodulesToRepository(createRepositoryModel);
+        }
+        repositoryParser.saveNewConfiguration(createRepositoryModel);
+
+        return new ResponseEntity<CreateRepositoryModel>(createRepositoryModel, OK);
+
+    }
 
     @PutMapping("/api/repository/{repositoryId}/finalize")
-    public ResponseEntity<RepositoryModel> editRepository(@PathVariable int repositoryId){
+    public ResponseEntity<RepositoryModel> finalizeRepository(@PathVariable int repositoryId){
         try{
             RepositoryModel finalized = repositoryParser.finalizeRepository(repositoryId);
             if(finalized != null){
@@ -107,5 +127,7 @@ public class GithubAPIController {
 
         return new ResponseEntity<CreateRepositoryModel>(createRepositoryModel, OK);
     }
+
+
 
 }
