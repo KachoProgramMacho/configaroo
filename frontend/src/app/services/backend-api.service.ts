@@ -5,6 +5,7 @@ import { Repository } from "../models/Repository";
 import { Branch } from "../models/Branch";
 import { Commit } from "../models/Commit";
 import { CreateRepositoryModel } from "../models/CreateRepositoryModel";
+import {Submodule} from "../models/Submodule";
 
 @Injectable({
   providedIn: "root"
@@ -50,5 +51,13 @@ export class BackendAPIService {
       `${this.backendUrl}/repository/${id}/finalize`,
       {}
     );
+  }
+
+  getSubModulesOfRepository(repoId: number): Observable<Submodule[]> {
+    return this.http.get<Submodule[]>(`${this.backendUrl}/repository/${repoId}/submodules`)
+  }
+
+  editConfiguration(repoId: number, editRepository: CreateRepositoryModel): Observable<Submodule[]> {
+    return this.http.put<Submodule[]>(`${this.backendUrl}/repository/${repoId}/edit`, editRepository)
   }
 }

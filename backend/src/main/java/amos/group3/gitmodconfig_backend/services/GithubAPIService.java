@@ -132,8 +132,12 @@ public class GithubAPIService {
 
         for(SubmoduleModel s:submoduleModels){
             //s.getRepositoryName returns ID and NOT a Name even though the method name suggests otherwise
-            RepositoryModel currentRepository = repositoryParser.getRepositoryById(Integer.parseInt(s.getRepositoryName()));
-
+            RepositoryModel currentRepository;
+            try {
+                currentRepository = repositoryParser.getRepositoryById(Integer.parseInt(s.getRepositoryName()));
+            }catch (NumberFormatException e){
+                currentRepository = repositoryParser.getRepositoryById(repositoryParser.getIdByRepositoryName(s.getRepositoryName()));
+            }
             // Add submodule to tree root
             String contentString = "[submodule \""+currentRepository.getRepo()+"\"]\n\tpath = " + currentRepository.getRepo()+"\n\turl = "+currentRepository.getUrl()+"\n";
             treeRoot.put("content", treeRoot.get("content")+contentString);

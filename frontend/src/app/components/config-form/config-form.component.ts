@@ -124,10 +124,6 @@ export class ConfigFormComponent implements OnInit {
     currentRow.selectedCommitSHA = commitSHA;
   }
 
-  onModalClick(e) {
-    console.log(e.target.value);
-  }
-
   onRepoNameChange(e) {
     this.repoName = e.target.value;
   }

@@ -2,6 +2,7 @@ package amos.group3.gitmodconfig_backend.util;
 
 import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
+import amos.group3.gitmodconfig_backend.models.SubmoduleModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -52,23 +54,43 @@ public class RepositoryParser {
     }
 
     public RepositoryModel saveNewConfiguration(CreateRepositoryModel createRepositoryModel){
+        String[] submoduleRepositoryNames= null;
+        String[] submoduleBranchNames= null;
+        String[] submoduleCommits= null;
 
-        int[] submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
-                .mapToInt(i->i).toArray();
 
-        String[] submoduleRepositoryNames = new String[submodules.length];
-        String[] submoduleBranchNames = new String[submodules.length];
-        String[] submoduleCommits = new String[submodules.length];
-        int  i = 0;
-         Arrays.asList(createRepositoryModel.getSubmodules()).forEach(submoduleModel -> {
-            String repositoryName = submoduleModel.getRepositoryName();
-            String branchName = submoduleModel.getBranchName();
-            String commit = submoduleModel.getCommitSHA();
-            submoduleRepositoryNames[i] = repositoryName;
-            submoduleBranchNames[i] = branchName;
-            submoduleCommits[i] = commit;
-        });
+        int[] submodules= null;
+        if(!createRepositoryModel.isContentRepository()) {
+            try {
 
+                submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
+                        .mapToInt(i -> i).toArray();
+            } catch (NumberFormatException e) {
+                submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> this.getIdByRepositoryName(submoduleModel.getRepositoryName()))
+                        .mapToInt(i -> i).toArray();
+            }
+
+            submoduleRepositoryNames = new String[submodules.length];
+            submoduleBranchNames = new String[submodules.length];
+            submoduleCommits = new String[submodules.length];
+            for (int i = 0; i < submodules.length; i++) {
+                SubmoduleModel submoduleModel = createRepositoryModel.getSubmodules()[i];
+
+                String repositoryName;
+                try {
+
+                    repositoryName = this.getRepositoryById(Integer.parseInt(submoduleModel.getRepositoryName())).getRepo();
+                } catch (NumberFormatException e) {
+                    repositoryName = this.getRepositoryById(this.getIdByRepositoryName(submoduleModel.getRepositoryName())).getRepo();
+                }
+
+                String branchName = submoduleModel.getBranchName();
+                String commit = submoduleModel.getCommitSHA();
+                submoduleRepositoryNames[i] = repositoryName;
+                submoduleBranchNames[i] = branchName;
+                submoduleCommits[i] = commit;
+            }
+        }
         RepositoryModel newRepo = RepositoryModel.builder()
                 .repo(createRepositoryModel.getName())
                 .owner(GITHUB_ACCOUNT_OWNER)
@@ -111,8 +133,12 @@ public class RepositoryParser {
     }
 
     public int getIdByRepositoryName(String name){
-        return repositories.stream().filter(repositoryModel -> repositoryModel.getRepo().equals(name))
-                .findFirst().get().getId();
+        try {
+            return repositories.stream().filter(repositoryModel -> repositoryModel.getRepo().equals(name))
+                    .findFirst().get().getId();
+        }catch (NoSuchElementException e){
+            return  Integer.parseInt(name);
+        }
     }
 
     public ArrayList<RepositoryModel> getNotFinalizedConfigurationRepositories(){
