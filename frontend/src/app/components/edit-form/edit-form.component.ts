@@ -37,7 +37,7 @@ export class EditFormComponent implements OnInit {
     // Get All Repositories and filter only the ones that are not finalized
     this.backendApiService.getRepositories().subscribe(
       repositories => {
-        this.repositories = repositories.filter(repo => !repo.finalized);
+        this.repositories = repositories;//.filter(repo => !repo.finalized);
       },
       err => {
         this.errorMessage = err.message;
@@ -74,7 +74,7 @@ export class EditFormComponent implements OnInit {
       const repoId = e.target.value;
       this.backendApiService.finalizeRepository(repoId).subscribe(
         repository => {
-          this.repositories = this.repositories.filter(repo => repo.id != repoId);
+          //this.repositories = this.repositories.filter(repo => repo.id != repoId);
           this.loadingFinalize = false;
           alert("Repository successfully Finalized");
         },

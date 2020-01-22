@@ -29,23 +29,26 @@
                       type="button"
                       data-toggle="modal"
                       data-target="#editModal"
+                      [disabled]="repo.finalized"
                       (click)="onModalClick($event)"
                       value="{{i}}">
                 Edit</button>
             </td>
-            <td class="d-none d-md-table-cell">
+            <td class="d-none d-md-table-cell" >
               <button
                 class="btn btn-outline-info m-1"
                 (click)="onFinalizeRepo($event)"
+                [disabled]="repo.finalized"
                 value="{{ repo.id }}"
               >
                 {{ loadingFinalize ? "Loading..." : "Finalize" }}
               </button>
             </td>
-            <td class="d-none d-md-table-cell">
+            <td class="d-none d-md-table-cell" >
               <button
                 class="btn btn-outline-danger m-1"
                 (click)="onDeleteRepo($event)"
+                [disabled]="repo.finalized"
                 value="{{ repo.id }}"
               >
                 {{ loadingDelete ? "Loading..." : "Delete" }}
@@ -57,12 +60,6 @@
     </div>
   </div>
 
-  <!-- Button trigger modal -->
-  <button
-
-  >
-    Launch demo modal
-  </button>
 
   <!-- Modal -->
   <div
