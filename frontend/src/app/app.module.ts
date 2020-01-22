@@ -9,6 +9,7 @@ import { MainComponent } from "./components/main/main.component";
 import { ConfigFormComponent } from "./components/config-form/config-form.component";
 import { RowComponent } from "./components/row/row.component";
 import { EditFormComponent } from "./components/edit-form/edit-form.component";
+import { SigmaGraphComponent } from './components/sigma-graph/sigma-graph.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { EditFormComponent } from "./components/edit-form/edit-form.component";
     MainComponent,
     ConfigFormComponent,
     RowComponent,
-    EditFormComponent
+    EditFormComponent,
+    SigmaGraphComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
