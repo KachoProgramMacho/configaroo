@@ -17,22 +17,25 @@ export class ConfigFormComponent implements OnInit {
   repositories: Repository[];
   selectedRepoId: string;
   repoName: string;
-  isLoading: boolean;
+  isLoadingCreateRepository: boolean;
   isContentRepository: boolean;
   errorMessage: string;
+  isLoadingRepositories: boolean;
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
-    this.isLoading = false;
+    this.isLoadingCreateRepository = false;
     this.isContentRepository = false;
     this.errorMessage = "";
+    this.isLoadingRepositories = true;
   }
 
   ngOnInit() {
     this.backendApiService.getRepositories().subscribe(
       repositories => {
         this.repositories = repositories;
+        this.isLoadingRepositories = false;
       },
       err => {
         this.errorMessage = err.message;
@@ -55,7 +58,7 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onCreateConfig(e) {
-    this.isLoading = true;
+    this.isLoadingCreateRepository = true;
     const configRepoSubmodules = this.rows.map(row => {
       return new Submodule(
         row.selectedRepoId,
@@ -73,7 +76,7 @@ export class ConfigFormComponent implements OnInit {
       storedConfiguration => {
         console.log("STORED CONFIGURATION:", storedConfiguration);
         alert("Repository successfully created");
-        this.isLoading = false;
+        this.isLoadingCreateRepository = false;
       },
       err => {
         this.errorMessage = err.message;

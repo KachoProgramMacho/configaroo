@@ -50,8 +50,10 @@
 
   <div class="row d-flex justify-content-center m-2">
     <button class="btn btn-outline-warning" (click)="onCreateConfig($event)">
-      {{ isLoading ? "Loading..." : "Create Configuration" }}
+      {{ isLoadingCreateRepository ? "Loading..." : "Create Configuration" }}
     </button>
   </div>
 </div>
-<sigma-graph></sigma-graph>
+<div *ngIf="!isLoadingRepositories">
+  <sigma-graph [repositories]="repositories"></sigma-graph>
+</div>
