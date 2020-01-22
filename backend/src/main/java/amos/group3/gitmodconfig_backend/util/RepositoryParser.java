@@ -59,7 +59,7 @@ public class RepositoryParser {
         String[] submoduleCommits= null;
 
 
-        int[] submodules= null;
+        int[] submodules= new int[0];
         if(!createRepositoryModel.isContentRepository()) {
             try {
 

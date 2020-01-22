@@ -1,7 +1,5 @@
 #sigma-container {
-  min-width: 600px;
-  min-height: 600px;
-  width: 33%;
-  height: 33%;
+  min-width: 300px;
+  min-height: 300px;
   border: 1px solid black;
 }
