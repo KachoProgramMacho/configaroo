@@ -8,7 +8,6 @@ import ElGrapho from "elgrapho";
   styleUrls: ["./sigma-graph.component.css"]
 })
 export class SigmaGraphComponent implements OnInit {
-
   @Input()
   repositories: Repository[];
   constructor() {}
@@ -16,7 +15,7 @@ export class SigmaGraphComponent implements OnInit {
   ngOnInit() {
     let model = this.generateRepositoryGraph(this.repositories);
     let graph = new ElGrapho({
-      container: document.getElementById('sigma-container'),
+      container: document.getElementById("sigma-container"),
       model: ElGrapho.layouts.Chord(model),
       width: 400,
       height: 400
@@ -30,7 +29,7 @@ export class SigmaGraphComponent implements OnInit {
 
     //map position in nodes to ID
     repositories.forEach((repository, index) => {
-      idToIndexMap.set(repository.id,index);
+      idToIndexMap.set(repository.id, index);
     });
 
     repositories.forEach((repository, index) => {
@@ -53,8 +52,8 @@ export class SigmaGraphComponent implements OnInit {
       nodes.push(repositoryNode);
     });
     return {
-      nodes:nodes,
-      edges:edges
+      nodes: nodes,
+      edges: edges
     };
   }
 }
