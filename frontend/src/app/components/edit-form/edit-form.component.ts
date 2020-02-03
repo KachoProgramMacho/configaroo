@@ -149,12 +149,19 @@ export class EditFormComponent implements OnInit {
     console.log(this.editedName);
   }
 
-  onRepoSelected({ repoId, rowIndex }) {
+  onRepoSelected({ repoName, rowIndex }) {
+    //check if empty
+    if(!repoName){
+      return;
+    }
     //1.) Send request to fetch all the branches for the given repo
+    let repoId = this.getRepoIdByRepoName(repoName)
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
         const currentRow = this.rows[rowIndex];
-        currentRow.selectedRepoName = repoId;
+        currentRow.selectedRepoName = repoName;
+        currentRow.selectedBranchName = "";
+        currentRow.selectedCommitSHA = "";
         currentRow.branches = branches;
       },
       err => {
@@ -167,12 +174,18 @@ export class EditFormComponent implements OnInit {
   }
 
   onBranchSelected({ branchName, rowIndex }) {
+    //check if empty
+    if(!branchName){
+      return;
+    }
+    let repoId = this.getRepoIdByRepoName(this.rows[rowIndex].selectedRepoName)
     this.backendApiService
-      .getCommitsOfRepo(this.rows[rowIndex].selectedRepoName, branchName)
+      .getCommitsOfRepo(repoId, branchName)
       .subscribe(
         commits => {
           const currentRow = this.rows[rowIndex];
           currentRow.selectedBranchName = branchName;
+          currentRow.selectedCommitSHA = "";
           currentRow.commits = commits;
         },
         err => {
@@ -185,6 +198,10 @@ export class EditFormComponent implements OnInit {
   }
 
   onCommitSelected({ commitSHA, rowIndex }) {
+    //check if empty
+    if(!commitSHA){
+      return;
+    }
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
   }
@@ -230,5 +247,12 @@ export class EditFormComponent implements OnInit {
 
   onModalClose() {
     this.rows = [];
+  }
+
+  getRepoIdByRepoName(repoName) {
+    const repoId = this.repositories.filter(repo => repo.name === repoName)[0]
+      .id;
+
+    return repoId;
   }
 }

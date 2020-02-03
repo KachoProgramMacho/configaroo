@@ -62,13 +62,13 @@ public class GithubAPIService {
 
     }
 
-    public ResponseEntity<BranchModel[]> getBranchesOfRepository(int repositoryId){
+    public ResponseEntity<BranchModel[]> getBranchesOfRepository(String repositoryId){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
         final String branchesOfRepositoryURL = baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + selectedRepository.getName() + "/branches";
         return restTemplate.exchange(branchesOfRepositoryURL, HttpMethod.GET, null, BranchModel[].class);
     }
 
-    public ResponseEntity<CommitModel[]> getCommitsOfBranchOfRepository(int repositoryId, String branchName){
+    public ResponseEntity<CommitModel[]> getCommitsOfBranchOfRepository(String repositoryId, String branchName){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
         final String commitsOfSelectedBranchURL = baseURL_Github + "/repos/" + selectedRepository.getOwner()
                 + "/" + selectedRepository.getName() + "/commits?sha="+branchName;
@@ -132,12 +132,8 @@ public class GithubAPIService {
 
         for(SubmoduleModel s:submoduleModels){
             //s.getRepositoryName returns ID and NOT a Name even though the method name suggests otherwise
-            RepositoryModel currentRepository;
-            try {
-                currentRepository = repositoryParser.getRepositoryById(Integer.parseInt(s.getRepositoryName()));
-            }catch (NumberFormatException e){
-                currentRepository = repositoryParser.getRepositoryById(repositoryParser.getIdByRepositoryName(s.getRepositoryName()));
-            }
+            RepositoryModel currentRepository = repositoryParser.getRepositoryById(repositoryParser.getIdByRepositoryName(s.getRepositoryName()));
+
             // Add submodule to tree root
             String contentString = "[submodule \""+currentRepository.getName()+"\"]\n\tpath = " + currentRepository.getName()+"\n\turl = "+currentRepository.getUrl()+"\n";
             treeRoot.put("content", treeRoot.get("content")+contentString);

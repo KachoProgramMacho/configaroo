@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Builder
 public class RepositoryModel {
 
-    private int id;
+    private String id;
 
     private String name;
 
@@ -23,7 +23,7 @@ public class RepositoryModel {
 
     private boolean finalized;
 
-    private int[] submodules;
+    private String[] submodules;
 
     private String[] submoduleRepositoryNames;
 

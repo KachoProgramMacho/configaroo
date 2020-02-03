@@ -13,10 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -47,8 +44,8 @@ public class RepositoryParser {
         }
     }
 
-    public RepositoryModel getRepositoryById(int id){
-        return repositories.stream().filter((RepositoryModel repository)->repository.getId()==id).findFirst()
+    public RepositoryModel getRepositoryById(String id){
+        return repositories.stream().filter((RepositoryModel repository)->repository.getId().equals(id)).findFirst()
                 .orElseThrow(() -> new ResponseStatusException(NOT_FOUND, "Unable to find repository with ID: "+id));
 
     }
@@ -59,16 +56,12 @@ public class RepositoryParser {
         String[] submoduleCommits= null;
 
 
-        int[] submodules= new int[0];
+        String[] submodules= new String[0];
         if(!createRepositoryModel.isContentRepository()) {
-            try {
 
-                submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> Integer.parseInt(submoduleModel.getRepositoryName()))
-                        .mapToInt(i -> i).toArray();
-            } catch (NumberFormatException e) {
-                submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream().map(submoduleModel -> this.getIdByRepositoryName(submoduleModel.getRepositoryName()))
-                        .mapToInt(i -> i).toArray();
-            }
+            submodules = Arrays.asList(createRepositoryModel.getSubmodules()).stream()
+                    .map(submoduleModel -> this.getIdByRepositoryName(submoduleModel.getRepositoryName())).toArray(size -> new String[size]);
+
 
             submoduleRepositoryNames = new String[submodules.length];
             submoduleBranchNames = new String[submodules.length];
@@ -76,13 +69,7 @@ public class RepositoryParser {
             for (int i = 0; i < submodules.length; i++) {
                 SubmoduleModel submoduleModel = createRepositoryModel.getSubmodules()[i];
 
-                String repositoryName;
-                try {
-
-                    repositoryName = this.getRepositoryById(Integer.parseInt(submoduleModel.getRepositoryName())).getName();
-                } catch (NumberFormatException e) {
-                    repositoryName = this.getRepositoryById(this.getIdByRepositoryName(submoduleModel.getRepositoryName())).getName();
-                }
+                String repositoryName = submoduleModel.getRepositoryName();
 
                 String branchName = submoduleModel.getBranchName();
                 String commit = submoduleModel.getCommitSHA();
@@ -108,7 +95,7 @@ public class RepositoryParser {
         return newRepo;
     }
 
-    public RepositoryModel deleteRepository(int id){
+    public RepositoryModel deleteRepository(String id){
         RepositoryModel repoToDelete = this.getRepositoryById(id);
         if(!repoToDelete.isFinalized() && repoToDelete.getType().equals("configuration")){
             repositories.remove(repoToDelete);
@@ -119,7 +106,7 @@ public class RepositoryParser {
         }
     }
 
-    public RepositoryModel finalizeRepository(int id){
+    public RepositoryModel finalizeRepository(String id){
         RepositoryModel toBeFinalized = this.getRepositoryById(id);
         if(toBeFinalized==null){
             return null;
@@ -132,12 +119,12 @@ public class RepositoryParser {
         return toBeFinalized;
     }
 
-    public int getIdByRepositoryName(String name){
+    public String getIdByRepositoryName(String name){
         try {
             return repositories.stream().filter(repositoryModel -> repositoryModel.getName().equals(name))
                     .findFirst().get().getId();
         }catch (NoSuchElementException e){
-            return  Integer.parseInt(name);
+            return  name;
         }
     }
 
@@ -155,9 +142,8 @@ public class RepositoryParser {
     }
 
     //return max id value +1
-    private int generateId(){
-        return repositories.stream().map(RepositoryModel::getId)
-                .max(Comparator.comparing(i -> i)).get()+1;
+    private String generateId(){
+        return UUID.randomUUID().toString();
     }
 
     private void writeRepositoriesToJSONFile(ArrayList<RepositoryModel> repositories){

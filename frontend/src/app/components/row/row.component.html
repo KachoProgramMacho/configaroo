@@ -5,7 +5,7 @@
     Select repository...
   </option>
   <option
-    [selected]="repo.name == row.selectedRepoId"
+    [selected]="repo.name == row.selectedRepoName"
     *ngFor="let repo of repositories"
     value="{{ repo.name }}"
   >

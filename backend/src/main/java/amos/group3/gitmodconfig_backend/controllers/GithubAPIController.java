@@ -30,7 +30,7 @@ public class GithubAPIController {
     }
 
     @GetMapping("/api/repository/{repositoryId}/submodules")
-    public ResponseEntity<SubmoduleModel[]> getRepositorySubmodules(@PathVariable int repositoryId){
+    public ResponseEntity<SubmoduleModel[]> getRepositorySubmodules(@PathVariable String repositoryId){
         RepositoryModel currentRepo = repositoryParser.getRepositoryById(repositoryId);
         SubmoduleModel[] allSubmodulesOfCurrentRepo = new SubmoduleModel[currentRepo.getSubmodules().length];
         for(int i = 0 ; i < currentRepo.getSubmodules().length;i++){
@@ -46,7 +46,7 @@ public class GithubAPIController {
     }
 
     @PutMapping("/api/repository/{repositoryId}/edit")
-    public ResponseEntity<CreateRepositoryModel> editRepository(@PathVariable int repositoryId, @RequestBody CreateRepositoryModel createRepositoryModel){
+    public ResponseEntity<CreateRepositoryModel> editRepository(@PathVariable String repositoryId, @RequestBody CreateRepositoryModel createRepositoryModel){
 
        // 1.) Delete Old Configuration Repository Locally
         RepositoryModel repoToDelete = repositoryParser.deleteRepository(repositoryId);
@@ -71,7 +71,7 @@ public class GithubAPIController {
     }
 
     @PutMapping("/api/repository/{repositoryId}/finalize")
-    public ResponseEntity<RepositoryModel> finalizeRepository(@PathVariable int repositoryId){
+    public ResponseEntity<RepositoryModel> finalizeRepository(@PathVariable String repositoryId){
         try{
             RepositoryModel finalized = repositoryParser.finalizeRepository(repositoryId);
             if(finalized != null){
@@ -85,7 +85,7 @@ public class GithubAPIController {
     }
 
     @DeleteMapping("/api/repository/{repositoryId}")
-    public ResponseEntity<RepositoryModel> deleteConfigurationRepository(@PathVariable int repositoryId){
+    public ResponseEntity<RepositoryModel> deleteConfigurationRepository(@PathVariable String repositoryId){
         RepositoryModel repoToDelete;
         try{
             repoToDelete = repositoryParser.deleteRepository(repositoryId);
@@ -101,7 +101,7 @@ public class GithubAPIController {
     }
 
     @GetMapping("/api/repository/{repositoryId}/branches")
-    public ResponseEntity<BranchModel[]> getBranchesOfRepository(@PathVariable int repositoryId){
+    public ResponseEntity<BranchModel[]> getBranchesOfRepository(@PathVariable String repositoryId){
             ResponseEntity<BranchModel[]> responseEntity = githubAPIService.getBranchesOfRepository(repositoryId);
             if(responseEntity.getStatusCode()!=OK){
                 return new ResponseEntity<>(BAD_REQUEST);
@@ -111,7 +111,7 @@ public class GithubAPIController {
     }
 
     @GetMapping("/api/repository/{repositoryId}/branches/{branchName}/commits")
-    public ResponseEntity<CommitModel[]> getBranchesOfRepository(@PathVariable int repositoryId, @PathVariable String branchName){
+    public ResponseEntity<CommitModel[]> getBranchesOfRepository(@PathVariable String repositoryId, @PathVariable String branchName){
         ResponseEntity<CommitModel[]> responseEntity = githubAPIService.getCommitsOfBranchOfRepository(repositoryId,branchName);
         if(responseEntity.getStatusCode()!=OK){
             return new ResponseEntity<>(BAD_REQUEST);

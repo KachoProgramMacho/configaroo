@@ -88,12 +88,20 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onRepoSelected({ repoName, rowIndex }) {
+    //check if empty
+    if(!repoName){
+      return;
+    }
     const repoId = this.getRepoIdByRepoName(repoName);
     //1.) Send request to fetch all the branches for the given repo
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
+        console.log("tva sum zel: ");
+        console.log(branches);
         const currentRow = this.rows[rowIndex];
         currentRow.selectedRepoName = repoName;
+        currentRow.selectedBranchName = "";
+        currentRow.selectedCommitSHA = "";
         currentRow.branches = branches;
       },
       err => {
@@ -106,6 +114,10 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onBranchSelected({ branchName, rowIndex }) {
+    //check if empty
+    if(!branchName){
+      return;
+    }
     const repoId = this.getRepoIdByRepoName(
       this.rows[rowIndex].selectedRepoName
     );
@@ -113,6 +125,7 @@ export class ConfigFormComponent implements OnInit {
       commits => {
         const currentRow = this.rows[rowIndex];
         currentRow.selectedBranchName = branchName;
+        currentRow.selectedCommitSHA = "";
         currentRow.commits = commits;
       },
       err => {
@@ -125,6 +138,10 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onCommitSelected({ commitSHA, rowIndex }) {
+    //check if empty
+    if(!commitSHA){
+      return;
+    }
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
   }
