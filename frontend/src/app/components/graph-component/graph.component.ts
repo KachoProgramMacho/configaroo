@@ -3,11 +3,11 @@ import { Repository } from "../../models/Repository";
 import ElGrapho from "elgrapho";
 
 @Component({
-  selector: "sigma-graph",
-  templateUrl: "./sigma-graph.component.html",
-  styleUrls: ["./sigma-graph.component.css"]
+  selector: "graph",
+  templateUrl: "./graph.component.html",
+  styleUrls: ["./graph.component.css"]
 })
-export class SigmaGraphComponent implements OnInit {
+export class GraphComponent implements OnInit {
   @Input()
   repositories: Repository[];
   constructor() {}
