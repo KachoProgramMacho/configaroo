@@ -4,8 +4,12 @@
   <option value="">
     Select repository...
   </option>
-  <option [selected]="repo.repo == row.selectedRepoId" *ngFor="let repo of repositories" value="{{ repo.id }}">
-    {{ repo.repo }}
+  <option
+    [selected]="repo.name == row.selectedRepoId"
+    *ngFor="let repo of repositories"
+    value="{{ repo.name }}"
+  >
+    {{ repo.name }}
   </option>
 </select>
 
@@ -13,7 +17,11 @@
   <option value="">
     Select branch...
   </option>
-  <option [selected]="branch.name == row.selectedBranchName" *ngFor="let branch of row.branches" value="{{ branch.name }}">
+  <option
+    [selected]="branch.name == row.selectedBranchName"
+    *ngFor="let branch of row.branches"
+    value="{{ branch.name }}"
+  >
     {{ branch.name }}
   </option>
 </select>
@@ -22,7 +30,11 @@
   <option value="">
     Select commit...
   </option>
-  <option [selected]="commit.sha == row.selectedCommitSHA" *ngFor="let commit of row.commits" value="{{ commit.sha }}">
+  <option
+    [selected]="commit.sha == row.selectedCommitSHA"
+    *ngFor="let commit of row.commits"
+    value="{{ commit.sha }}"
+  >
     {{ commit.sha }}
   </option>
 </select>

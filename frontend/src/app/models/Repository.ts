@@ -1,6 +1,6 @@
 export class Repository {
   id: number;
-  repo: string;
+  name: string;
   type: string;
   url: string;
   owner: string;

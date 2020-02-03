@@ -23,7 +23,7 @@ export class RowComponent implements OnInit {
 
   onSelectRepo(e) {
     this.repoSelected.emit({
-      repoId: e.target.value,
+      repoName: e.target.value,
       rowIndex: this.row.rowIndex
     });
   }

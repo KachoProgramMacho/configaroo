@@ -13,7 +13,7 @@ public class RepositoryModel {
 
     private int id;
 
-    private String repo;
+    private String name;
 
     private String type;
 

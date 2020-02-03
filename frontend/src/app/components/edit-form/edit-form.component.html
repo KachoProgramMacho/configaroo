@@ -20,21 +20,24 @@
         <tbody>
           <tr *ngFor="let repo of repositories; let i = index">
             <th scope="row">{{ i + 1 }}</th>
-            <td>{{ repo.repo }}</td>
+            <td>{{ repo.name }}</td>
             <td class="d-none d-md-table-cell">{{ repo.owner }}</td>
             <td>{{ repo.type }}</td>
             <td class="d-none d-lg-table-cell">{{ repo.url }}</td>
             <td class="d-none d-md-table-cell">
-              <button class="btn btn-outline-warning m-1"
-                      type="button"
-                      data-toggle="modal"
-                      data-target="#editModal"
-                      [disabled]="repo.finalized"
-                      (click)="onModalClick($event)"
-                      value="{{i}}">
-                Edit</button>
+              <button
+                class="btn btn-outline-warning m-1"
+                type="button"
+                data-toggle="modal"
+                data-target="#editModal"
+                [disabled]="repo.finalized"
+                (click)="onModalClick($event)"
+                value="{{ i }}"
+              >
+                Edit
+              </button>
             </td>
-            <td class="d-none d-md-table-cell" >
+            <td class="d-none d-md-table-cell">
               <button
                 class="btn btn-outline-info m-1"
                 (click)="onFinalizeRepo($event)"
@@ -44,7 +47,7 @@
                 {{ loadingFinalize ? "Loading..." : "Finalize" }}
               </button>
             </td>
-            <td class="d-none d-md-table-cell" >
+            <td class="d-none d-md-table-cell">
               <button
                 class="btn btn-outline-danger m-1"
                 (click)="onDeleteRepo($event)"
@@ -59,7 +62,6 @@
       </table>
     </div>
   </div>
-
 
   <!-- Modal -->
   <div
@@ -84,11 +86,10 @@
           </button>
         </div>
         <div class="modal-body">
-
           <input
             type="text"
             (change)="onEditRepoNameChange($event)"
-            value="{{editedName}}"
+            value="{{ editedName }}"
             class="form-control"
             id="repo-name"
             placeholder="Enter Repository Name ..."
@@ -97,11 +98,17 @@
             <button class="m-1 btn btn-outline-info" (click)="onAddRow($event)">
               Add+
             </button>
-            <button class="m-1 btn btn-outline-danger" (click)="onRemoveRow($event)">
+            <button
+              class="m-1 btn btn-outline-danger"
+              (click)="onRemoveRow($event)"
+            >
               Remove-
             </button>
           </div>
-          <div class="row d-flex justify-content-center m-2" *ngFor="let row of rows">
+          <div
+            class="row d-flex justify-content-center m-2"
+            *ngFor="let row of rows"
+          >
             <app-row
               [row]="row"
               [repositories]="repositories"
@@ -112,10 +119,22 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" (click)="onModalClose()" class="btn btn-secondary" data-dismiss="modal">
+          <button
+            type="button"
+            (click)="onModalClose()"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+          >
             Close
           </button>
-          <button (click)="onModalSaveChanges($event)" type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+          <button
+            (click)="onModalSaveChanges($event)"
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+          >
+            Save changes
+          </button>
         </div>
       </div>
     </div>

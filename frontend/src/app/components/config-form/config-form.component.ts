@@ -61,7 +61,7 @@ export class ConfigFormComponent implements OnInit {
     this.isLoadingCreateRepository = true;
     const configRepoSubmodules = this.rows.map(row => {
       return new Submodule(
-        row.selectedRepoId,
+        row.selectedRepoName,
         row.selectedBranchName,
         row.selectedCommitSHA
       );
@@ -87,12 +87,13 @@ export class ConfigFormComponent implements OnInit {
     );
   }
 
-  onRepoSelected({ repoId, rowIndex }) {
+  onRepoSelected({ repoName, rowIndex }) {
+    const repoId = this.getRepoIdByRepoName(repoName);
     //1.) Send request to fetch all the branches for the given repo
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
         const currentRow = this.rows[rowIndex];
-        currentRow.selectedRepoId = repoId;
+        currentRow.selectedRepoName = repoName;
         currentRow.branches = branches;
       },
       err => {
@@ -105,21 +106,22 @@ export class ConfigFormComponent implements OnInit {
   }
 
   onBranchSelected({ branchName, rowIndex }) {
-    this.backendApiService
-      .getCommitsOfRepo(this.rows[rowIndex].selectedRepoId, branchName)
-      .subscribe(
-        commits => {
-          const currentRow = this.rows[rowIndex];
-          currentRow.selectedBranchName = branchName;
-          currentRow.commits = commits;
-        },
-        err => {
-          this.errorMessage = err.message;
-          setTimeout(() => {
-            this.errorMessage = "";
-          }, 5000);
-        }
-      );
+    const repoId = this.getRepoIdByRepoName(
+      this.rows[rowIndex].selectedRepoName
+    );
+    this.backendApiService.getCommitsOfRepo(repoId, branchName).subscribe(
+      commits => {
+        const currentRow = this.rows[rowIndex];
+        currentRow.selectedBranchName = branchName;
+        currentRow.commits = commits;
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 
   onCommitSelected({ commitSHA, rowIndex }) {
@@ -129,5 +131,12 @@ export class ConfigFormComponent implements OnInit {
 
   onRepoNameChange(e) {
     this.repoName = e.target.value;
+  }
+
+  getRepoIdByRepoName(repoName) {
+    const repoId = this.repositories.filter(repo => repo.name === repoName)[0]
+      .id;
+
+    return repoId;
   }
 }

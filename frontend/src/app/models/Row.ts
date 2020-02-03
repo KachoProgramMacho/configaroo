@@ -3,7 +3,7 @@ import { Commit } from "./Commit";
 
 export class Row {
   rowIndex: number;
-  selectedRepoId: string;
+  selectedRepoName: string;
   selectedBranchName: string;
   selectedCommitSHA: string;
   branches: Branch[];
@@ -13,14 +13,14 @@ export class Row {
     rowIndex: number,
     branches: Branch[],
     commits: Commit[],
-    selectedRepoId: string,
+    selectedRepoName: string,
     selectedBranchName: string,
     selectedCommitSHA: string
   ) {
     this.rowIndex = rowIndex;
     this.branches = branches;
     this.commits = commits;
-    this.selectedRepoId = selectedRepoId;
+    this.selectedRepoName = selectedRepoName;
     this.selectedBranchName = selectedBranchName;
     this.selectedCommitSHA = selectedCommitSHA;
   }

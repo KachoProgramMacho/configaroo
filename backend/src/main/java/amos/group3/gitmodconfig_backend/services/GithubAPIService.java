@@ -54,7 +54,7 @@ public class GithubAPIService {
         ArrayList<RepositoryModel> repositories = repositoryParser.getRepositories();
         List<Object> result = new ArrayList<Object>();
         for(RepositoryModel repo : repositories){
-            String url = baseURL_Github + "/repos/" + repo.getOwner() + "/" + repo.getRepo();
+            String url = baseURL_Github + "/repos/" + repo.getOwner() + "/" + repo.getName();
             Object response = this.restTemplate.getForObject(url, Object.class);
             result.add(response);
         }
@@ -64,14 +64,14 @@ public class GithubAPIService {
 
     public ResponseEntity<BranchModel[]> getBranchesOfRepository(int repositoryId){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
-        final String branchesOfRepositoryURL = baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + selectedRepository.getRepo() + "/branches";
+        final String branchesOfRepositoryURL = baseURL_Github + "/repos/" + selectedRepository.getOwner() + "/" + selectedRepository.getName() + "/branches";
         return restTemplate.exchange(branchesOfRepositoryURL, HttpMethod.GET, null, BranchModel[].class);
     }
 
     public ResponseEntity<CommitModel[]> getCommitsOfBranchOfRepository(int repositoryId, String branchName){
         RepositoryModel selectedRepository = repositoryParser.getRepositoryById(repositoryId);
         final String commitsOfSelectedBranchURL = baseURL_Github + "/repos/" + selectedRepository.getOwner()
-                + "/" + selectedRepository.getRepo() + "/commits?sha="+branchName;
+                + "/" + selectedRepository.getName() + "/commits?sha="+branchName;
 
         return this.restTemplate.exchange(commitsOfSelectedBranchURL,HttpMethod.GET,null, CommitModel[].class);
     }
@@ -139,13 +139,13 @@ public class GithubAPIService {
                 currentRepository = repositoryParser.getRepositoryById(repositoryParser.getIdByRepositoryName(s.getRepositoryName()));
             }
             // Add submodule to tree root
-            String contentString = "[submodule \""+currentRepository.getRepo()+"\"]\n\tpath = " + currentRepository.getRepo()+"\n\turl = "+currentRepository.getUrl()+"\n";
+            String contentString = "[submodule \""+currentRepository.getName()+"\"]\n\tpath = " + currentRepository.getName()+"\n\turl = "+currentRepository.getUrl()+"\n";
             treeRoot.put("content", treeRoot.get("content")+contentString);
             System.out.println("Content string: "  + contentString);
 
             //Init new tree item for current repository
             JSONObject treeItem = new JSONObject();
-            treeItem.put("path",currentRepository.getRepo());
+            treeItem.put("path",currentRepository.getName());
             treeItem.put("mode","160000");
             treeItem.put("type","commit");
             treeItem.put("sha",s.getCommitSHA());
@@ -195,7 +195,7 @@ public class GithubAPIService {
     }
 
     public void deleteRepository(RepositoryModel repoToDelete) throws RestClientException {
-        final String deleteUrl = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + repoToDelete.getRepo();
+        final String deleteUrl = baseURL_Github + "/repos/" +GITHUB_ACCOUNT_OWNER+"/" + repoToDelete.getName();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(GITHUB_PERSONAL_TOKEN);

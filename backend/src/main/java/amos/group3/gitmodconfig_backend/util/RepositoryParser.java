@@ -79,9 +79,9 @@ public class RepositoryParser {
                 String repositoryName;
                 try {
 
-                    repositoryName = this.getRepositoryById(Integer.parseInt(submoduleModel.getRepositoryName())).getRepo();
+                    repositoryName = this.getRepositoryById(Integer.parseInt(submoduleModel.getRepositoryName())).getName();
                 } catch (NumberFormatException e) {
-                    repositoryName = this.getRepositoryById(this.getIdByRepositoryName(submoduleModel.getRepositoryName())).getRepo();
+                    repositoryName = this.getRepositoryById(this.getIdByRepositoryName(submoduleModel.getRepositoryName())).getName();
                 }
 
                 String branchName = submoduleModel.getBranchName();
@@ -92,7 +92,7 @@ public class RepositoryParser {
             }
         }
         RepositoryModel newRepo = RepositoryModel.builder()
-                .repo(createRepositoryModel.getName())
+                .name(createRepositoryModel.getName())
                 .owner(GITHUB_ACCOUNT_OWNER)
                 .id(generateId())
                 .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+ createRepositoryModel.getName())
@@ -134,7 +134,7 @@ public class RepositoryParser {
 
     public int getIdByRepositoryName(String name){
         try {
-            return repositories.stream().filter(repositoryModel -> repositoryModel.getRepo().equals(name))
+            return repositories.stream().filter(repositoryModel -> repositoryModel.getName().equals(name))
                     .findFirst().get().getId();
         }catch (NoSuchElementException e){
             return  Integer.parseInt(name);

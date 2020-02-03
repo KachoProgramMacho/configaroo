@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {Repository} from "src/app/models/Repository";
-import {BackendAPIService} from "../../services/backend-api.service";
-import {Row} from "../../models/Row";
-import {Submodule} from "../../models/Submodule";
-import {CreateRepositoryModel} from "../../models/CreateRepositoryModel";
+import { Component, OnInit } from "@angular/core";
+import { Repository } from "src/app/models/Repository";
+import { BackendAPIService } from "../../services/backend-api.service";
+import { Row } from "../../models/Row";
+import { Submodule } from "../../models/Submodule";
+import { CreateRepositoryModel } from "../../models/CreateRepositoryModel";
 
 @Component({
   selector: "app-delete-form",
@@ -37,7 +37,7 @@ export class EditFormComponent implements OnInit {
     // Get All Repositories and filter only the ones that are not finalized
     this.backendApiService.getRepositories().subscribe(
       repositories => {
-        this.repositories = repositories;//.filter(repo => !repo.finalized);
+        this.repositories = repositories; //.filter(repo => !repo.finalized);
       },
       err => {
         this.errorMessage = err.message;
@@ -54,7 +54,9 @@ export class EditFormComponent implements OnInit {
       const repoId = e.target.value;
       this.backendApiService.deleteRepository(repoId).subscribe(
         repository => {
-          this.repositories = this.repositories.filter(repo => repo.id != repoId);
+          this.repositories = this.repositories.filter(
+            repo => repo.id != repoId
+          );
           this.loadingDelete = false;
           alert("Repository successfully deleted");
         },
@@ -91,58 +93,68 @@ export class EditFormComponent implements OnInit {
   onModalClick(e) {
     let indexOfEditedRepo = e.target.value;
     this.currentlyEditedRepo = this.repositories[indexOfEditedRepo];
-    this.editedName = this.currentlyEditedRepo.repo;
+    this.editedName = this.currentlyEditedRepo.name;
     this.editedId = this.currentlyEditedRepo.id;
-    this.backendApiService.getSubModulesOfRepository(this.currentlyEditedRepo.id).subscribe(submodules=>{
-      console.log(submodules);
-      submodules.forEach(submodule=>{
-        let subRepoId = this.repositories.filter(repo => repo.repo === submodule.repositoryName)[0].id;
-        let rowBranches;
-        let rowCommits;
-        this.backendApiService
-          .getCommitsOfRepo(subRepoId, submodule.branchName)
-          .subscribe(
-            commits => {
-              rowCommits = commits;
-              this.backendApiService.getBranchesOfRepo(subRepoId).subscribe(
-                branches => {
-                  rowBranches = branches;
+    this.backendApiService
+      .getSubmodulesOfRepository(this.currentlyEditedRepo.id)
+      .subscribe(submodules => {
+        console.log(submodules);
+        submodules.forEach(submodule => {
+          let subRepoId = this.repositories.filter(
+            repo => repo.name === submodule.repositoryName
+          )[0].id;
+          let rowBranches;
+          let rowCommits;
+          this.backendApiService
+            .getCommitsOfRepo(subRepoId, submodule.branchName)
+            .subscribe(
+              commits => {
+                rowCommits = commits;
+                this.backendApiService.getBranchesOfRepo(subRepoId).subscribe(
+                  branches => {
+                    rowBranches = branches;
 
-                  this.rows.push(new Row(this.rows.length, rowBranches, rowCommits, submodule.repositoryName, submodule.branchName, submodule.commitSHA));
-                },
-                err => {
-                  this.errorMessage = err.message;
-                  setTimeout(() => {
-                    this.errorMessage = "";
-                  }, 5000);
-                }
-              );
-            },
-            err => {
-              this.errorMessage = err.message;
-              setTimeout(() => {
-                this.errorMessage = "";
-              }, 5000);
-            }
-          );
-
-
+                    this.rows.push(
+                      new Row(
+                        this.rows.length,
+                        rowBranches,
+                        rowCommits,
+                        submodule.repositoryName,
+                        submodule.branchName,
+                        submodule.commitSHA
+                      )
+                    );
+                  },
+                  err => {
+                    this.errorMessage = err.message;
+                    setTimeout(() => {
+                      this.errorMessage = "";
+                    }, 5000);
+                  }
+                );
+              },
+              err => {
+                this.errorMessage = err.message;
+                setTimeout(() => {
+                  this.errorMessage = "";
+                }, 5000);
+              }
+            );
+        });
       });
-    })
   }
 
   onEditRepoNameChange(e) {
     this.editedName = e.target.value;
-    console.log(this.editedName)
+    console.log(this.editedName);
   }
-
 
   onRepoSelected({ repoId, rowIndex }) {
     //1.) Send request to fetch all the branches for the given repo
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
         const currentRow = this.rows[rowIndex];
-        currentRow.selectedRepoId = repoId;
+        currentRow.selectedRepoName = repoId;
         currentRow.branches = branches;
       },
       err => {
@@ -156,7 +168,7 @@ export class EditFormComponent implements OnInit {
 
   onBranchSelected({ branchName, rowIndex }) {
     this.backendApiService
-      .getCommitsOfRepo(this.rows[rowIndex].selectedRepoId, branchName)
+      .getCommitsOfRepo(this.rows[rowIndex].selectedRepoName, branchName)
       .subscribe(
         commits => {
           const currentRow = this.rows[rowIndex];
@@ -191,7 +203,7 @@ export class EditFormComponent implements OnInit {
   onModalSaveChanges(e) {
     const configRepoSubmodules = this.rows.map(row => {
       return new Submodule(
-        row.selectedRepoId,
+        row.selectedRepoName,
         row.selectedBranchName,
         row.selectedCommitSHA
       );
