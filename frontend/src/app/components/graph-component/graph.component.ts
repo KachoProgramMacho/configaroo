@@ -1,15 +1,22 @@
-import { Component, Input, OnInit } from "@angular/core";
+import {
+  Component,
+  Input,
+  OnInit,
+  SimpleChanges,
+  ChangeDetectionStrategy
+} from "@angular/core";
 import { Repository } from "../../models/Repository";
 import ElGrapho from "elgrapho";
+import { log } from "util";
 
 @Component({
   selector: "graph",
   templateUrl: "./graph.component.html",
-  styleUrls: ["./graph.component.css"]
+  styleUrls: ["./graph.component.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GraphComponent implements OnInit {
-  @Input()
-  repositories: Repository[];
+  @Input() repositories: Repository[];
   constructor() {}
 
   //Initial graph type
@@ -19,13 +26,12 @@ export class GraphComponent implements OnInit {
     this.createGraph();
   }
 
-  onSelectGraphType(e){
+  onSelectGraphType(e) {
     this.graphType = e.target.value;
     this.createGraph();
-
   }
 
-  createGraph(){
+  createGraph() {
     let model = this.generateRepositoryGraph(this.repositories);
     new ElGrapho({
       container: document.getElementById("sigma-container"),
@@ -33,6 +39,10 @@ export class GraphComponent implements OnInit {
       width: 400,
       height: 400
     });
+  }
+
+  ngOnChanges() {
+    console.log("NESHTO STAVA KURCI");
   }
 
   generateRepositoryGraph(repositories) {

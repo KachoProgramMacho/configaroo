@@ -51,14 +51,14 @@ export class BackendAPIService {
     );
   }
 
-  getSubmodulesOfRepository(repoId: number): Observable<Submodule[]> {
+  getSubmodulesOfRepository(repoId: string): Observable<Submodule[]> {
     return this.http.get<Submodule[]>(
       `${this.backendUrl}/repository/${repoId}/submodules`
     );
   }
 
   editConfiguration(
-    repoId: number,
+    repoId: string,
     editRepository: CreateRepositoryModel
   ): Observable<Submodule[]> {
     return this.http.put<Submodule[]>(

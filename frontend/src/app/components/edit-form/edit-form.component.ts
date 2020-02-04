@@ -18,7 +18,7 @@ export class EditFormComponent implements OnInit {
   loadingFinalize: boolean;
   errorMessage: string;
   editedName: string;
-  editedId: number;
+  editedId: string;
   githubAccount: String;
 
   currentlyEditedRepo: Repository;

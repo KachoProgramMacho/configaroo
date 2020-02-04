@@ -34,7 +34,7 @@ public class HomeController {
     @GetMapping("/api/github-account")
     public ResponseEntity<String> getGithubAccount(){
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type","application/json");
+        headers.add("Content-Type","text/plain");
         return new  ResponseEntity<String>(GITHUB_ACCOUNT_OWNER, headers, HttpStatus.OK);
     }
 }

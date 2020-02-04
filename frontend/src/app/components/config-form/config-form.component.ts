@@ -144,6 +144,15 @@ export class ConfigFormComponent implements OnInit {
     }
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
+
+    // Preemptively draw the relationship graph (how it would look like if you commit the changes)
+    const configRepoSubmodulesIDs = this.rows.map(row => {
+      return this.getRepoIdByRepoName(row.selectedRepoName);
+    });
+
+    const newRepo = new Repository(this.repoName, configRepoSubmodulesIDs);
+    this.repositories = [...this.repositories, newRepo];
+    console.log(this.repositories);
   }
 
   onRepoNameChange(e) {
