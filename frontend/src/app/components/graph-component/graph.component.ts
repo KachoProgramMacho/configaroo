@@ -12,11 +12,24 @@ export class GraphComponent implements OnInit {
   repositories: Repository[];
   constructor() {}
 
+  //Initial graph type
+  graphType: string = "Chord";
+
   ngOnInit() {
+    this.createGraph();
+  }
+
+  onSelectGraphType(e){
+    this.graphType = e.target.value;
+    this.createGraph();
+
+  }
+
+  createGraph(){
     let model = this.generateRepositoryGraph(this.repositories);
-    let graph = new ElGrapho({
+    new ElGrapho({
       container: document.getElementById("sigma-container"),
-      model: ElGrapho.layouts.Chord(model),
+      model: ElGrapho.layouts[`${this.graphType}`](model),
       width: 400,
       height: 400
     });

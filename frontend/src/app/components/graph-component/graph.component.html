@@ -1,1 +1,19 @@
+<label >Graph type:</label>
+<select class="form-control" (change)="onSelectGraphType($event)">
+  <option value="Chord">
+    Chord
+  </option>
+  <option value="Cluster">
+    Cluster
+  </option>
+  <option value="ForceDirected">
+    ForceDirected
+  </option>
+  <option value="Tree">
+    Tree
+  </option>
+  <option value="RadialTree">
+    RadialTree
+  </option>
+</select>
 <div id="sigma-container"></div>
