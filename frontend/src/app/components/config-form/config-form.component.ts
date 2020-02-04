@@ -77,7 +77,6 @@ export class ConfigFormComponent implements OnInit {
         console.log("STORED CONFIGURATION:", storedConfiguration);
         alert("Repository successfully created");
         this.isLoadingCreateRepository = false;
-        window.location.reload();
       },
       err => {
         this.errorMessage = err.message;
