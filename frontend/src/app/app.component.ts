@@ -5,10 +5,4 @@ import { Component } from "@angular/core";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"]
 })
-export class AppComponent {
-  choice: string = "random";
-
-  changeValue = e => {
-    this.choice = e.target.value;
-  };
-}
+export class AppComponent {}

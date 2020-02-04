@@ -89,7 +89,7 @@ export class ConfigFormComponent implements OnInit {
 
   onRepoSelected({ repoName, rowIndex }) {
     //check if empty
-    if(!repoName){
+    if (!repoName) {
       return;
     }
     const repoId = this.getRepoIdByRepoName(repoName);
@@ -115,7 +115,7 @@ export class ConfigFormComponent implements OnInit {
 
   onBranchSelected({ branchName, rowIndex }) {
     //check if empty
-    if(!branchName){
+    if (!branchName) {
       return;
     }
     const repoId = this.getRepoIdByRepoName(
@@ -139,7 +139,7 @@ export class ConfigFormComponent implements OnInit {
 
   onCommitSelected({ commitSHA, rowIndex }) {
     //check if empty
-    if(!commitSHA){
+    if (!commitSHA) {
       return;
     }
     const currentRow = this.rows[rowIndex];

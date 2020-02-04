@@ -19,6 +19,7 @@ export class EditFormComponent implements OnInit {
   errorMessage: string;
   editedName: string;
   editedId: number;
+  githubAccount: String;
 
   currentlyEditedRepo: Repository;
 
@@ -34,6 +35,8 @@ export class EditFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    //Retrieve githubAccount as variable from localStorage
+    this.githubAccount = localStorage.getItem("githubAccount");
     // Get All Repositories and filter only the ones that are not finalized
     this.backendApiService.getRepositories().subscribe(
       repositories => {
@@ -73,7 +76,9 @@ export class EditFormComponent implements OnInit {
       const repoId = e.target.value;
       this.backendApiService.finalizeRepository(repoId).subscribe(
         repository => {
-          this.repositories = this.repositories.filter(repo => repo.id != repoId);
+          this.repositories = this.repositories.filter(
+            repo => repo.id != repoId
+          );
           this.loadingFinalize = false;
           alert("Repository successfully finalized!");
         },
@@ -148,11 +153,11 @@ export class EditFormComponent implements OnInit {
 
   onRepoSelected({ repoName, rowIndex }) {
     //check if empty
-    if(!repoName){
+    if (!repoName) {
       return;
     }
     //1.) Send request to fetch all the branches for the given repo
-    let repoId = this.getRepoIdByRepoName(repoName)
+    let repoId = this.getRepoIdByRepoName(repoName);
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
         const currentRow = this.rows[rowIndex];
@@ -172,31 +177,29 @@ export class EditFormComponent implements OnInit {
 
   onBranchSelected({ branchName, rowIndex }) {
     //check if empty
-    if(!branchName){
+    if (!branchName) {
       return;
     }
-    let repoId = this.getRepoIdByRepoName(this.rows[rowIndex].selectedRepoName)
-    this.backendApiService
-      .getCommitsOfRepo(repoId, branchName)
-      .subscribe(
-        commits => {
-          const currentRow = this.rows[rowIndex];
-          currentRow.selectedBranchName = branchName;
-          currentRow.selectedCommitSHA = "";
-          currentRow.commits = commits;
-        },
-        err => {
-          this.errorMessage = err.message;
-          setTimeout(() => {
-            this.errorMessage = "";
-          }, 5000);
-        }
-      );
+    let repoId = this.getRepoIdByRepoName(this.rows[rowIndex].selectedRepoName);
+    this.backendApiService.getCommitsOfRepo(repoId, branchName).subscribe(
+      commits => {
+        const currentRow = this.rows[rowIndex];
+        currentRow.selectedBranchName = branchName;
+        currentRow.selectedCommitSHA = "";
+        currentRow.commits = commits;
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 
   onCommitSelected({ commitSHA, rowIndex }) {
     //check if empty
-    if(!commitSHA){
+    if (!commitSHA) {
       return;
     }
     const currentRow = this.rows[rowIndex];

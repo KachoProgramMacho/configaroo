@@ -30,7 +30,7 @@
                 type="button"
                 data-toggle="modal"
                 data-target="#editModal"
-                [disabled]="repo.finalized"
+                [disabled]="repo.finalized || githubAccount !== repo.owner"
                 (click)="onModalClick($event)"
                 value="{{ i }}"
               >
@@ -51,7 +51,7 @@
               <button
                 class="btn btn-outline-danger m-1"
                 (click)="onDeleteRepo($event)"
-                [disabled]="repo.finalized"
+                [disabled]="repo.finalized || githubAccount !== repo.owner"
                 value="{{ repo.id }}"
               >
                 {{ loadingDelete ? "Loading..." : "Delete" }}
@@ -122,7 +122,7 @@
           <button
             type="button"
             (click)="onModalClose()"
-            class="btn btn-secondary"
+            class="btn btn-outline-secondary"
             data-dismiss="modal"
           >
             Close
@@ -130,7 +130,7 @@
           <button
             (click)="onModalSaveChanges($event)"
             type="button"
-            class="btn btn-primary"
+            class="btn btn-outline-info"
             data-dismiss="modal"
           >
             Save changes

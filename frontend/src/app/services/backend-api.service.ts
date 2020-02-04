@@ -20,8 +20,6 @@ export class BackendAPIService {
   }
 
   getBranchesOfRepo(repoId): Observable<Branch[]> {
-    console.log("WTF", repoId);
-
     return this.http.get<Branch[]>(
       `${this.backendUrl}/repository/${repoId}/branches`
     );
@@ -67,5 +65,11 @@ export class BackendAPIService {
       `${this.backendUrl}/repository/${repoId}/edit`,
       editRepository
     );
+  }
+
+  getGithubAccount(): Observable<string> {
+    return this.http.get(`${this.backendUrl}/github-account`, {
+      responseType: "text"
+    });
   }
 }
