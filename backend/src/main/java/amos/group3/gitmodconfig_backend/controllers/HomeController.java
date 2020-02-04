@@ -4,6 +4,9 @@ import amos.group3.gitmodconfig_backend.services.GithubAPIService;
 import amos.group3.gitmodconfig_backend.util.RepositoryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +32,9 @@ public class HomeController {
     }
 
     @GetMapping("/api/github-account")
-    public String getGithubAccount(){
-        return GITHUB_ACCOUNT_OWNER;
+    public ResponseEntity<String> getGithubAccount(){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type","application/json");
+        return new  ResponseEntity<String>(GITHUB_ACCOUNT_OWNER, headers, HttpStatus.OK);
     }
 }
