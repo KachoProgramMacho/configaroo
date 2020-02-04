@@ -34,7 +34,7 @@ export class GraphComponent implements OnInit {
 
     repositories.forEach((repository, index) => {
       const repositoryNode = {
-        label: repository.repo,
+        label: repository.name,
         x: Math.random(),
         y: Math.random(),
         group: repository.type === "content" ? 3 : 5
