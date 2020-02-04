@@ -18,6 +18,9 @@ public class HomeController {
     @Value("${GITHUB_PERSONAL_TOKEN}")
     private String GITHUB_PERSONAL_TOKEN;
 
+    @Value("${GITHUB_ACCOUNT_OWNER}")
+    private String GITHUB_ACCOUNT_OWNER;
+
     @GetMapping("/")
     public List getHomePage(){
         List result = githubAPIService.getRepositoryMetadata();
@@ -25,8 +28,8 @@ public class HomeController {
         return result;
     }
 
-/*    @GetMapping("/createRepo")
-    public String createRepo(){
-        return githubAPIService.createRepository();
-    }*/
+    @GetMapping("/api/github-account")
+    public String getGithubAccount(){
+        return GITHUB_ACCOUNT_OWNER;
+    }
 }
