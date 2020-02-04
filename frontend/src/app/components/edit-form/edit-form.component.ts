@@ -54,11 +54,9 @@ export class EditFormComponent implements OnInit {
       const repoId = e.target.value;
       this.backendApiService.deleteRepository(repoId).subscribe(
         repository => {
-          this.repositories = this.repositories.filter(
-            repo => repo.id != repoId
-          );
           this.loadingDelete = false;
-          alert("Repository successfully deleted");
+          alert("Repository successfully deleted!");
+          window.location.reload();
         },
         err => {
           this.errorMessage = err.message;
@@ -78,7 +76,8 @@ export class EditFormComponent implements OnInit {
         repository => {
           //this.repositories = this.repositories.filter(repo => repo.id != repoId);
           this.loadingFinalize = false;
-          alert("Repository successfully Finalized");
+          alert("Repository successfully finalized!");
+          window.location.reload();
         },
         err => {
           this.errorMessage = err.message;
@@ -234,6 +233,7 @@ export class EditFormComponent implements OnInit {
     this.backendApiService.editConfiguration(this.editedId, newRepo).subscribe(
       storedConfiguration => {
         console.log("EDITED CONFIGURATION:", storedConfiguration);
+        window.location.reload();
       },
       err => {
         this.errorMessage = err.message;
