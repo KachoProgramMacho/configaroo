@@ -22,7 +22,6 @@ export class ConfigFormComponent implements OnInit {
   isContentRepository: boolean;
   repoAlreadyOnGithub: boolean;
   errorMessage: string;
-  isLoadingRepositories: boolean;
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
@@ -32,22 +31,10 @@ export class ConfigFormComponent implements OnInit {
     this.repoAlreadyOnGithub = false;
     this.errorMessage = "";
     this.repoOwner = "";
-    this.isLoadingRepositories = true;
   }
 
   ngOnInit() {
-    this.backendApiService.getRepositories().subscribe(
-      repositories => {
-        this.repositories = repositories;
-        this.isLoadingRepositories = false;
-      },
-      err => {
-        this.errorMessage = err.message;
-        setTimeout(() => {
-          this.errorMessage = "";
-        }, 5000);
-      }
-    );
+    this.fetchRepositories();
   }
 
   onAddRow(e) {
@@ -80,9 +67,9 @@ export class ConfigFormComponent implements OnInit {
     console.log(newRepo);
     this.backendApiService.createRepository(newRepo).subscribe(
       storedConfiguration => {
-        console.log("STORED CONFIGURATION:", storedConfiguration);
         alert("Repository successfully created");
         this.isLoadingCreateRepository = false;
+        this.fetchRepositories();
       },
       err => {
         this.errorMessage = err.message;
@@ -102,8 +89,6 @@ export class ConfigFormComponent implements OnInit {
     //1.) Send request to fetch all the branches for the given repo
     this.backendApiService.getBranchesOfRepo(repoId).subscribe(
       branches => {
-        console.log("tva sum zel: ");
-        console.log(branches);
         const currentRow = this.rows[rowIndex];
         currentRow.selectedRepoName = repoName;
         currentRow.selectedBranchName = "";
@@ -191,5 +176,19 @@ export class ConfigFormComponent implements OnInit {
       .id;
 
     return repoId;
+  }
+
+  fetchRepositories() {
+    this.backendApiService.getRepositories().subscribe(
+      repositories => {
+        this.repositories = repositories;
+      },
+      err => {
+        this.errorMessage = err.message;
+        setTimeout(() => {
+          this.errorMessage = "";
+        }, 5000);
+      }
+    );
   }
 }

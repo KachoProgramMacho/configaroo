@@ -7,10 +7,7 @@
   <div class="container border border-secondary rounded">
     <!-- Graph ROW -->
     <div class="row">
-      <div
-        class="container d-flex justify-content-center mt-4"
-        *ngIf="!isLoadingRepositories"
-      >
+      <div class="container d-flex justify-content-center mt-4">
         <graph [repositories]="repositories"></graph>
       </div>
     </div>
