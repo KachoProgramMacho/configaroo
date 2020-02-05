@@ -14,7 +14,6 @@ export class EditFormComponent implements OnInit {
   rows: Row[];
   repositories: Repository[];
   loadingDelete: boolean;
-  loadingEdit: boolean;
   loadingFinalize: boolean;
   errorMessage: string;
   editedName: string;
@@ -22,15 +21,18 @@ export class EditFormComponent implements OnInit {
   githubAccount: String;
 
   currentlyEditedRepo: Repository;
+  currentlyEditedRepoIndex: number;
+
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
     this.loadingDelete = false;
-    this.loadingEdit = false;
+    this.loadingEdit = -1;
     this.loadingFinalize = false;
     this.errorMessage = "";
     this.currentlyEditedRepo = null;
+    this.currentlyEditedRepoIndex = -1;
     this.editedName = "";
   }
 
@@ -93,8 +95,9 @@ export class EditFormComponent implements OnInit {
   }
 
   onModalClick(e) {
-    let indexOfEditedRepo = e.target.value;
-    this.currentlyEditedRepo = this.repositories[indexOfEditedRepo];
+    this.currentlyEditedRepoIndex = parseInt(e.target.value);
+    console.log(this.currentlyEditedRepoIndex)
+    this.currentlyEditedRepo = this.repositories[this.currentlyEditedRepoIndex];
     this.editedName = this.currentlyEditedRepo.name;
     this.editedId = this.currentlyEditedRepo.id;
     this.backendApiService
@@ -236,9 +239,11 @@ export class EditFormComponent implements OnInit {
     this.backendApiService.editConfiguration(this.editedId, newRepo).subscribe(
       storedConfiguration => {
         console.log("EDITED CONFIGURATION:", storedConfiguration);
+        this.currentlyEditedRepoIndex = -1;
       },
       err => {
         this.errorMessage = err.message;
+        this.currentlyEditedRepoIndex = -1;
         setTimeout(() => {
           this.errorMessage = "";
         }, 5000);
@@ -249,6 +254,7 @@ export class EditFormComponent implements OnInit {
 
   onModalClose() {
     this.rows = [];
+    this.currentlyEditedRepoIndex = -1;
   }
 
   getRepoIdByRepoName(repoName) {
