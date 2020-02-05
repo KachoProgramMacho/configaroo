@@ -41,8 +41,8 @@ export class GraphComponent implements OnInit {
     new ElGrapho({
       container: document.getElementById("sigma-container"),
       model: ElGrapho.layouts[`${this.graphType}`](model),
-      width: 400,
-      height: 400
+      width: 500,
+      height: 500
     });
   }
 
