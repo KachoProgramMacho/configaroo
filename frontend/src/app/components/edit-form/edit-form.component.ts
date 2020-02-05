@@ -225,6 +225,8 @@ export class EditFormComponent implements OnInit {
         row.selectedCommitSHA
       );
     });
+
+    //repoAlreadyInGithub and owner attributes are relevant only for repository creation
     const newRepo = new CreateRepositoryModel(
       this.editedName,
       configRepoSubmodules,

@@ -17,8 +17,10 @@ export class ConfigFormComponent implements OnInit {
   repositories: Repository[];
   selectedRepoId: string;
   repoName: string;
+  repoOwner: string;
   isLoadingCreateRepository: boolean;
   isContentRepository: boolean;
+  repoAlreadyOnGithub: boolean;
   errorMessage: string;
   isLoadingRepositories: boolean;
 
@@ -27,7 +29,9 @@ export class ConfigFormComponent implements OnInit {
     this.repositories = [];
     this.isLoadingCreateRepository = false;
     this.isContentRepository = false;
+    this.repoAlreadyOnGithub = false;
     this.errorMessage = "";
+    this.repoOwner = "";
     this.isLoadingRepositories = true;
   }
 
@@ -69,7 +73,9 @@ export class ConfigFormComponent implements OnInit {
     const newRepo = new CreateRepositoryModel(
       this.repoName,
       configRepoSubmodules,
-      this.isContentRepository
+      this.isContentRepository,
+      this.repoAlreadyOnGithub,
+      this.repoAlreadyOnGithub? this.repoOwner : ""
     );
     console.log(newRepo);
     this.backendApiService.createRepository(newRepo).subscribe(
@@ -157,6 +163,10 @@ export class ConfigFormComponent implements OnInit {
 
   onRepoNameChange(e) {
     this.repoName = e.target.value;
+  }
+
+  onRepoOwnerChange(e) {
+    this.repoOwner = e.target.value;
   }
 
   getRepoIdByRepoName(repoName) {

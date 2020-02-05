@@ -123,19 +123,23 @@ public class GithubAPIController {
     @PostMapping("/api/repository")
     public ResponseEntity<CreateRepositoryModel> createRepository(@RequestBody CreateRepositoryModel createRepositoryModel){
 
-        try {
-            ResponseEntity createRepoResponse = githubAPIService.createRepository(createRepositoryModel);
-        }catch (HttpClientErrorException e){
+        //if repository is already on github add it just in the JSON file
+        if(!createRepositoryModel.isRepoAlreadyOnGithub()) {
+            try {
+                ResponseEntity createRepoResponse = githubAPIService.createRepository(createRepositoryModel);
+            } catch (HttpClientErrorException e) {
 
-            if(e.getStatusCode().equals(UNAUTHORIZED)){
-                return new ResponseEntity<>(UNAUTHORIZED);
-            }else if (e.getStatusCode().equals(UNPROCESSABLE_ENTITY)){
-                return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
+                if (e.getStatusCode().equals(UNAUTHORIZED)) {
+                    return new ResponseEntity<>(UNAUTHORIZED);
+                } else if (e.getStatusCode().equals(UNPROCESSABLE_ENTITY)) {
+                    return new ResponseEntity<>(UNPROCESSABLE_ENTITY);
+                }
+            }
+            if (!createRepositoryModel.isContentRepository()) {
+                githubAPIService.addSubmodulesToRepository(createRepositoryModel);
             }
         }
-        if(!createRepositoryModel.isContentRepository()) {
-            githubAPIService.addSubmodulesToRepository(createRepositoryModel);
-        }
+
         repositoryParser.saveNewConfiguration(createRepositoryModel);
 
         return new ResponseEntity<CreateRepositoryModel>(createRepositoryModel, OK);

@@ -80,9 +80,9 @@ public class RepositoryParser {
         }
         RepositoryModel newRepo = RepositoryModel.builder()
                 .name(createRepositoryModel.getName())
-                .owner(GITHUB_ACCOUNT_OWNER)
+                .owner(createRepositoryModel.isRepoAlreadyOnGithub()? createRepositoryModel.getOwner() : GITHUB_ACCOUNT_OWNER)
                 .id(generateId())
-                .url(GITHUB_URL_PREFIX+GITHUB_ACCOUNT_OWNER+"/"+ createRepositoryModel.getName())
+                .url(GITHUB_URL_PREFIX+(createRepositoryModel.isRepoAlreadyOnGithub()? createRepositoryModel.getOwner() : GITHUB_ACCOUNT_OWNER)+"/"+ createRepositoryModel.getName())
                 .type(createRepositoryModel.isContentRepository() ? "content" : "configuration")
                 .finalized(false)
                 .submodules(submodules)

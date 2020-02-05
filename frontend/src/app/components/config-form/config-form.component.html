@@ -27,6 +27,18 @@
         />
       </div>
     </div>
+    <!-- ENTER REPOSITORY OWNER -->
+    <div *ngIf="repoAlreadyOnGithub" class="row d-flex justify-content-center mt-4">
+      <div class="form-group">
+        <input
+          type="text"
+          (change)="onRepoOwnerChange($event)"
+          class="form-control"
+          id="repo-owner"
+          placeholder="Enter Repository Owner ..."
+        />
+      </div>
+    </div>
     <!-- CHECKBOX CONTENT/CONFIGURATION REPO ROW -->
     <div class="row d-flex justify-content-center m-2 p-2">
       <div>
@@ -37,6 +49,18 @@
           (change)="isContentRepository = !isContentRepository"
         />
         <label class="form-check-label">Content Repository</label>
+      </div>
+    </div>
+    <!-- Repository already on github checkbox -->
+    <div class="row d-flex justify-content-center m-2 p-2">
+      <div>
+        <input
+          class="form-check-input"
+          type="checkbox"
+          [checked]="repoAlreadyOnGithub"
+          (change)="repoAlreadyOnGithub = !repoAlreadyOnGithub"
+        />
+        <label class="form-check-label">Repository is already on Github</label>
       </div>
     </div>
 
