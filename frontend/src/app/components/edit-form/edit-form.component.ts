@@ -19,16 +19,13 @@ export class EditFormComponent implements OnInit {
   editedName: string;
   editedId: string;
   githubAccount: String;
-
   currentlyEditedRepo: Repository;
   currentlyEditedRepoIndex: number;
-
 
   constructor(private backendApiService: BackendAPIService) {
     this.rows = [];
     this.repositories = [];
     this.loadingDelete = false;
-    this.loadingEdit = -1;
     this.loadingFinalize = false;
     this.errorMessage = "";
     this.currentlyEditedRepo = null;
@@ -61,6 +58,9 @@ export class EditFormComponent implements OnInit {
         repository => {
           this.loadingDelete = false;
           alert("Repository successfully deleted!");
+          this.repositories = this.repositories.filter(
+            repo => repo.id !== repoId
+          );
         },
         err => {
           this.errorMessage = err.message;
@@ -96,7 +96,7 @@ export class EditFormComponent implements OnInit {
 
   onModalClick(e) {
     this.currentlyEditedRepoIndex = parseInt(e.target.value);
-    console.log(this.currentlyEditedRepoIndex)
+    console.log(this.currentlyEditedRepoIndex);
     this.currentlyEditedRepo = this.repositories[this.currentlyEditedRepoIndex];
     this.editedName = this.currentlyEditedRepo.name;
     this.editedId = this.currentlyEditedRepo.id;
