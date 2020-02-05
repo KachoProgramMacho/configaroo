@@ -26,6 +26,11 @@ export class GraphComponent implements OnInit {
     this.createGraph();
   }
 
+  ngOnChanges() {
+    console.log("On Change:");
+    this.createGraph();
+  }
+
   onSelectGraphType(e) {
     this.graphType = e.target.value;
     this.createGraph();
@@ -39,10 +44,6 @@ export class GraphComponent implements OnInit {
       width: 400,
       height: 400
     });
-  }
-
-  ngOnChanges() {
-    console.log("NESHTO STAVA KURCI");
   }
 
   generateRepositoryGraph(repositories) {
@@ -60,7 +61,12 @@ export class GraphComponent implements OnInit {
         label: repository.name,
         x: Math.random(),
         y: Math.random(),
-        group: repository.type === "content" ? 3 : 5
+        group:
+          repository.type === "content"
+            ? 3
+            : repository.type === "configuration"
+            ? 5
+            : 4
       };
       console.log("repository", repository);
       for (let i = 0; i < repository.submodules.length; i++) {

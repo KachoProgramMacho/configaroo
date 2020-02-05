@@ -6,7 +6,7 @@ import { Branch } from "src/app/models/Branch";
 import { Commit } from "src/app/models/Commit";
 import { CreateRepositoryModel } from "src/app/models/CreateRepositoryModel";
 import { Submodule } from "src/app/models/Submodule";
-
+import { PREVIEW_NODE_ID } from "../../constants";
 @Component({
   selector: "app-config-form",
   templateUrl: "./config-form.component.html",
@@ -75,7 +75,7 @@ export class ConfigFormComponent implements OnInit {
       configRepoSubmodules,
       this.isContentRepository,
       this.repoAlreadyOnGithub,
-      this.repoAlreadyOnGithub? this.repoOwner : ""
+      this.repoAlreadyOnGithub ? this.repoOwner : ""
     );
     console.log(newRepo);
     this.backendApiService.createRepository(newRepo).subscribe(
@@ -150,16 +150,8 @@ export class ConfigFormComponent implements OnInit {
     }
     const currentRow = this.rows[rowIndex];
     currentRow.selectedCommitSHA = commitSHA;
-
-    // Preemptively draw the relationship graph (how it would look like if you commit the changes)
-    const configRepoSubmodulesIDs = this.rows.map(row => {
-      return this.getRepoIdByRepoName(row.selectedRepoName);
-    });
-
-    const newRepo = new Repository(this.repoName, configRepoSubmodulesIDs);
-    this.repositories = [...this.repositories, newRepo];
-    console.log(this.repositories);
   }
+  "preview_node_ID";
 
   onRepoNameChange(e) {
     this.repoName = e.target.value;
@@ -167,6 +159,31 @@ export class ConfigFormComponent implements OnInit {
 
   onRepoOwnerChange(e) {
     this.repoOwner = e.target.value;
+  }
+
+  renderGraphPreview(e) {
+    if (!this.repoName) {
+      alert("Please enter repository name!");
+      return;
+    }
+    // Preemptively draw the relationship graph (how it would look like if you commit the changes)
+    const configRepoSubmodulesIDs = this.rows.map(row => {
+      return this.getRepoIdByRepoName(row.selectedRepoName);
+    });
+
+    // Remove previous preview node if there was one
+    this.repositories = this.repositories.filter(
+      repo => repo.id != PREVIEW_NODE_ID
+    );
+
+    // Add new preview node to the repositories array (which is an action that re-renders the graph)
+    const newRepo = new Repository(
+      this.repoName,
+      configRepoSubmodulesIDs,
+      PREVIEW_NODE_ID,
+      "preview"
+    );
+    this.repositories = [...this.repositories, newRepo];
   }
 
   getRepoIdByRepoName(repoName) {

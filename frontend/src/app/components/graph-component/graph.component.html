@@ -1,5 +1,5 @@
 <label>Graph type:</label>
-<select class="form-control" (change)="onSelectGraphType($event)">
+<select class="form-control mb-3" (change)="onSelectGraphType($event)">
   <option value="Chord">
     Chord
   </option>
@@ -16,4 +16,18 @@
     RadialTree
   </option>
 </select>
-<div id="sigma-container"></div>
+<div id="sigma-container" class="mb-3"></div>
+<div class="d-flex justify-content-center border border-light mb-3 mt-2">
+  <div class="my-legend">
+    <div class="legend-title">Node Colors:</div>
+    <div class="legend-scale">
+      <ul class="legend-labels">
+        <li>
+          <span style="background:#1c1c9f;"></span> Configuration Repository
+        </li>
+        <li><span style="background:#36b23f;"></span>Content Repository</li>
+        <li><span style="background:#952572"></span>Preview Repository</li>
+      </ul>
+    </div>
+  </div>
+</div>

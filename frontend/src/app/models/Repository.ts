@@ -9,10 +9,10 @@ export class Repository {
   finalized: boolean;
   submodules: string[];
 
-  constructor(name: string, submodules: string[]) {
-    this.id = "randomID123456789";
+  constructor(name: string, submodules: string[], id, type) {
+    this.id = id;
     this.name = name;
-    this.type = "configuration";
+    this.type = type;
     this.url = "";
     this.owner = "";
     this.finalized = false;
