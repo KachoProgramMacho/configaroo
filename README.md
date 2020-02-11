@@ -1,12 +1,14 @@
-# git-mod-config
+# Overview
 An app to manage configuration and visualisation of connected Git repositories
 
 
-### Installing
-Clone this repository in your local machine via
-```
-$ git clone https://github.com/nikkytub/git-mod-config.git
-```
---
+### Installation guide
+
+### Development environment setup guide
+
+
 ## Authors
-The AMOS Project-3 Students
+Denis Rangelov [Github Account 1](https://github.com/LukchoZloto)
+               [Github Account 2](https://github.com/d-rangelov)
+               
+Martin Kachev [Github Account](https://github.com/KachoProgramMacho)
