@@ -4,15 +4,18 @@ import amos.group3.gitmodconfig_backend.models.CreateRepositoryModel;
 import amos.group3.gitmodconfig_backend.models.RepositoryModel;
 import amos.group3.gitmodconfig_backend.models.SubmoduleModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.netty.util.internal.ResourcesUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,8 +40,8 @@ public class RepositoryParser {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
 
-            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(new File("src/main/resources/repositories.json"), RepositoryModel[].class)));
-
+            InputStream is = resourceLoader.getResource("classpath:repositories.json").getInputStream();
+            repositories = new ArrayList<RepositoryModel>(Arrays.asList(objectMapper.readValue(is, RepositoryModel[].class)));
         } catch (IOException e) {
             e.printStackTrace();
         }
