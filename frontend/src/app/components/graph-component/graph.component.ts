@@ -27,7 +27,6 @@ export class GraphComponent implements OnInit {
   }
 
   ngOnChanges() {
-    console.log("On Change:");
     this.createGraph();
   }
 
@@ -68,7 +67,7 @@ export class GraphComponent implements OnInit {
             ? 5
             : 4
       };
-      console.log("repository", repository);
+
       for (let i = 0; i < repository.submodules.length; i++) {
         const currentSubmoduleId = repository.submodules[i];
         const repositoryEdge = {

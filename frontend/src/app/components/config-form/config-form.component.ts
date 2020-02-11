@@ -64,7 +64,6 @@ export class ConfigFormComponent implements OnInit {
       this.repoAlreadyOnGithub,
       this.repoAlreadyOnGithub ? this.repoOwner : ""
     );
-    console.log(newRepo);
     this.backendApiService.createRepository(newRepo).subscribe(
       storedConfiguration => {
         alert("Repository successfully created");

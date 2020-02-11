@@ -96,14 +96,12 @@ export class EditFormComponent implements OnInit {
 
   onModalClick(e) {
     this.currentlyEditedRepoIndex = parseInt(e.target.value);
-    console.log(this.currentlyEditedRepoIndex);
     this.currentlyEditedRepo = this.repositories[this.currentlyEditedRepoIndex];
     this.editedName = this.currentlyEditedRepo.name;
     this.editedId = this.currentlyEditedRepo.id;
     this.backendApiService
       .getSubmodulesOfRepository(this.currentlyEditedRepo.id)
       .subscribe(submodules => {
-        console.log(submodules);
         submodules.forEach(submodule => {
           let subRepoId = this.repositories.filter(
             repo => repo.name === submodule.repositoryName
@@ -151,7 +149,6 @@ export class EditFormComponent implements OnInit {
 
   onEditRepoNameChange(e) {
     this.editedName = e.target.value;
-    console.log(this.editedName);
   }
 
   onRepoSelected({ repoName, rowIndex }) {
@@ -235,10 +232,9 @@ export class EditFormComponent implements OnInit {
       configRepoSubmodules,
       false
     );
-    console.log(newRepo);
+
     this.backendApiService.editConfiguration(this.editedId, newRepo).subscribe(
       storedConfiguration => {
-        console.log("EDITED CONFIGURATION:", storedConfiguration);
         this.currentlyEditedRepoIndex = -1;
       },
       err => {
