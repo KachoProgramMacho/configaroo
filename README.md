@@ -51,10 +51,14 @@ If you are interested in setting up your local development enviroment to either 
 
 #### Setup the Backend Dev Environment:
 
-1. Open the project pom.xml file with IntelliJ
+1. Open the project pom.xml file with IntelliJ:
 
+![alt text](https://github.com/KachoProgramMacho/configaroo/blob/master/documentation/images/configarooIntellijSetup.png)
 
-2. Run the project from the IDE
+2. Right click on the "GitmodconfigBackendApplication" class and press "Run GitmodconfigBackendApplication":
+
+![alt text](https://github.com/KachoProgramMacho/configaroo/blob/master/documentation/images/configarooBackendSetup.png)
+
 
 #### Setup the Frontend Dev Environment:
 
