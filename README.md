@@ -31,12 +31,17 @@ cd configaroo
 After cloning the project, to run Configaroo locally follow these steps:
 
 ##### Starting the Backend:
-1. 
+```shell
+cd backend
+mvn package
+java -jar target/gitmodconfig_backend-0.0.1-SNAPSHOT.jar
+```
 
 ##### Start the Frontend:
 ```shell
 cd frontend
 npm install
+ng build
 npm run dev
 ```
 
