@@ -137,7 +137,7 @@ public class GithubAPIService {
             // Add submodule to tree root
             String contentString = "[submodule \""+currentRepository.getName()+"\"]\n\tpath = " + currentRepository.getName()+"\n\turl = "+currentRepository.getUrl()+"\n";
             treeRoot.put("content", treeRoot.get("content")+contentString);
-            System.out.println("Content string: "  + contentString);
+
 
             //Init new tree item for current repository
             JSONObject treeItem = new JSONObject();

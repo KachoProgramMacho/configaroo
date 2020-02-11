@@ -27,7 +27,6 @@ public class HomeController {
     @GetMapping("/")
     public List getHomePage(){
         List result = githubAPIService.getRepositoryMetadata();
-        System.out.println(GITHUB_PERSONAL_TOKEN);
         return result;
     }
 
