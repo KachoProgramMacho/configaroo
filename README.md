@@ -55,7 +55,7 @@ If you are interested in setting up your local development enviroment to either 
 
 ![alt text](https://github.com/KachoProgramMacho/configaroo/blob/master/documentation/images/configarooIntellijSetup.png)
 
-2. Run Maven install from the Maven panel *(right side of the screen)* in IntelliJ 
+2. Run "install" from the Maven panel *(right side of the screen)* in IntelliJ 
 
 3. Right click on the "GitmodconfigBackendApplication" class and press "Run GitmodconfigBackendApplication":
 
