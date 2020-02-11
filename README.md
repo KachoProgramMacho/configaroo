@@ -30,14 +30,14 @@ cd configaroo
 
 After cloning the project, to run Configaroo locally follow these steps:
 
-##### Starting the Backend:
+#### Starting the Backend:
 ```shell
 cd backend
 mvn package
 java -jar target/gitmodconfig_backend-0.0.1-SNAPSHOT.jar
 ```
 
-##### Start the Frontend:
+#### Start the Frontend:
 ```shell
 cd frontend
 npm install
@@ -45,7 +45,30 @@ ng build
 npm run dev
 ```
 
-### Contributing
+## Development Environment Setup / Contributing:
+
+If you are interested in setting up your local development enviroment to either play around or extend the functionality of the project follow the steps below:
+
+#### Setup the Backend Dev Environment:
+
+1. Open the project pom.xml file with IntelliJ
+
+
+2. Run the project from the IDE
+
+#### Setup the Frontend Dev Environment:
+
+*To edit the project one can use any editor or IDE. Some examples include Atom, Visual Studio Code, Sublime Text, etc.*
+
+```shell
+cd frontend
+npm install
+code . # Opening the code with Visual Studio Code
+ng serve
+```
+
+
+
 
 
 
