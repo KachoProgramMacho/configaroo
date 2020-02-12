@@ -1,5 +1,6 @@
 # Overview
-An app to manage configuration and visualisation of connected Git repositories
+
+Configaroo is a tool developed in partnership with IAV. It allows effortless management of large distributed code bases. The prototype version of the tool enables the easy and straightforward organization of Github repositories and submodules by utilizing graph visualization functionality. In particular, Configaroo depicts the relationships between repositories and submodules as edges in a dependency graph. As visualization is one of the primary features of the tool, Configaroo supports a large variety of different graph layouts and allows dependency rendering ahead of time, so that developers can pick and choose the right set of modules for their final project configuration.
 
 ## Prerequisite Tools:
 *In brackets you can find the versions used during development.*
